@@ -31,4 +31,9 @@ public class Movement
         var direction = Rb.position + moveAmount * Time.deltaTime;
         Rb.MovePosition(direction);
     }
+
+    public Vector3 GetVelocity()
+    {
+        return Rb.velocity;
+    }
 }
