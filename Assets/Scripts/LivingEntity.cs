@@ -1,33 +1,32 @@
 ﻿using System;
 using UnityEngine;
 
-public abstract class LivingEntity : Poolable, IDamageable
+public abstract class LivingEntity : MonoBehaviour, IDamageable, IResettable
 {
     [SerializeField] private float StartingHealth;
     
-    private float Health;
+    public event Action<LivingEntity> OnSpawn;
+    public event Action<LivingEntity> OnDeath;
+    public EventHandler<HealthChangeArgs> OnHealthChange;
 
     private bool Dead;
-    public static event Action<LivingEntity> OnSpawn;
-    public static event Action<LivingEntity> OnDeath;
-    public event Action OnHealthChange;
     
-    protected virtual void Start()
+    public float Health { get; private set; }
+    public bool NeedHealing => Health < StartingHealth;
+
+    protected virtual void Awake()
     {
         ResetHealth();
     }
 
-    public override void Respawn(Vector3 spawnPosition)
+    public void Spawn(Vector3 spawnPosition)
     {
-        base.Respawn(spawnPosition);
+        OnHealthChange?.Invoke(this, new HealthChangeArgs(StartingHealth, StartingHealth));
         OnSpawn?.Invoke(this);
         ResetHealth();
         Dead = false;
-    }
-
-    protected virtual void Update()
-    {
-        KeepInBounds();
+        gameObject.transform.position = spawnPosition;
+        Enable();
     }
 
     public void TakeDamage(float damageAmount)
@@ -36,11 +35,11 @@ public abstract class LivingEntity : Poolable, IDamageable
             return;
 
         Health -= damageAmount;
-        OnHealthChange?.Invoke();
+        Health = Mathf.Clamp(Health, 0f, float.MaxValue);
+        OnHealthChange?.Invoke(this, new HealthChangeArgs(StartingHealth, Health));
 
         if (Health <= 0f)
         {
-            Health = 0f;
             Die();
         }
     }
@@ -49,14 +48,15 @@ public abstract class LivingEntity : Poolable, IDamageable
     {
         if (Dead)
             return;
-
+        
         Health += healAmount;
+        Health = Mathf.Clamp(Health, 0f, StartingHealth);
+        OnHealthChange?.Invoke(this, new HealthChangeArgs(StartingHealth, Health));
     }
 
     protected virtual void Die()
     {
         Dead = true;
-        ReturnToPool();
         OnDeath?.Invoke(this);
     }
 
@@ -65,39 +65,18 @@ public abstract class LivingEntity : Poolable, IDamageable
         Health = StartingHealth;
     }
 
+    public void Reset()
+    {
+        gameObject.SetActive(false);
+    }
+
     public float GetHealthPercent()
     {
         return Health / StartingHealth;
     }
-    
-    public void KeepInBounds()
+
+    private void Enable()
     {
-        var screenWidth = GetScreenHalfHeightInWorldUnits() * 2 - 1f;
-        var screenHeight = GetScreenHalfHeightInWorldUnits();
-
-        var newPosition = transform.position;
-        if (newPosition.x < -screenWidth)
-            newPosition.x = -screenWidth;
-        if (newPosition.x > screenWidth)
-            newPosition.x = screenWidth;
-        if (newPosition.y < -screenHeight)
-            newPosition.y = -screenHeight;
-        if (newPosition.y > screenHeight)
-            newPosition.y = screenHeight;
-
-        transform.position = newPosition;
-
-    }
-    
-    private static float GetScreenHalfWidthInWorldUnits()
-    {
-        var camera = CameraHolder.Instance.Camera;
-        return camera.aspect * camera.orthographicSize;
-    }
-
-    private static float GetScreenHalfHeightInWorldUnits()
-    {
-        var camera = CameraHolder.Instance.Camera;
-        return camera.orthographicSize;
+        gameObject.SetActive(true);
     }
 }

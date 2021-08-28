@@ -1,46 +1,61 @@
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 public class EnemiesManager : Singleton<EnemiesManager>
 {
-    private readonly HashSet<LivingEntity> Enemies = new HashSet<LivingEntity>();
+    [SerializeField] private List<EnemyPoolData> EnemyPoolsData;
+    [SerializeField] private WaveManager WaveManager;
+    private Dictionary<EnemyType, EnemyPoolHandler> Pools;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        Pools = new Dictionary<EnemyType, EnemyPoolHandler>();
+        
+        foreach (var pool in EnemyPoolsData)
+        {
+            if (Pools.ContainsKey(pool.EnemyType))
+                Debug.LogError($"Duplicate EnemyType:{pool.EnemyType}");
+
+            Pools.Add(pool.EnemyType, new EnemyPoolHandler(pool.PoolSize, pool.Prefab));
+        }
+
+        foreach (var pool in Pools.Values)
+        {
+            pool.Init();
+            pool.EnemyDied += OnEnemyDied;
+        }
+    }
+    
+    private void OnEnemyDied(EnemyPoolHandler pool, Enemy enemy)
+    {
+        if (AliveEnemiesCount() <= 1)
+            WaveManager.NextWave();
+    }
+
+    private int AliveEnemiesCount()
+    {
+        return Pools.Values.Sum(pool => pool.AliveEnemiesCount);
+    }
 
     private void Start()
     {
-        LivingEntity.OnSpawn += OnEnemySpawn;
-        LivingEntity.OnDeath += OnEnemyDeath;
-        
-        WaveManager.Instance.NextWave();
+        WaveManager.Start();
     }
 
-    private void OnDisable()
+    public Enemy GetEnemy(EnemyType type)
     {
-        LivingEntity.OnSpawn -= OnEnemySpawn;
-        LivingEntity.OnDeath -= OnEnemyDeath;
-    }
-
-    private void OnEnemyDeath(LivingEntity enemy)
-    {
-        if (!(enemy is Enemy))
-            return;
-
-        Enemies.Remove(enemy);
-        
-        if (Enemies.Count == 0)
-            WaveManager.Instance.NextWave();            
-    }
-
-    private void OnEnemySpawn(LivingEntity enemy)
-    {
-        if (!(enemy is Enemy))
-            return;
-        
-        Enemies.Add(enemy);
+        return Pools[type].Allocate();
     }
 
     public IEnumerable<LivingEntity> GetAlliesWithLowestHealth(int alliesPerHeal)
     {
-        var enemies = Enemies.OrderBy(t => t.GetHealthPercent());
-        return enemies.Take(alliesPerHeal);
+        var allies = new List<LivingEntity>();
+        foreach (var pool in Pools.Values)
+            allies.AddRange(pool.AliveEnemies.Where(aliveEnemy => aliveEnemy.NeedHealing));
+
+        var enemies = allies.OrderBy(t => t.GetHealthPercent()).ToList();
+        return enemies.Count >= alliesPerHeal ? enemies.Take(alliesPerHeal) : enemies;
     }
 }

@@ -1,7 +1,8 @@
 
+using System;
 using UnityEngine;
 
-public class Arrow : Poolable
+public class Arrow : MonoBehaviour, IResettable
 {
     [SerializeField] private float Speed;
     [SerializeField] private float LifeTime;
@@ -9,17 +10,21 @@ public class Arrow : Poolable
     [SerializeField] private LayerMask LayerMask;
 
     private float TimeAlive;
+    public EventHandler ProjectileDestroyed;
     
     public void Launch(Vector3 start, Vector3 towards)
     {
+        gameObject.SetActive(true);
+        
         TimeAlive = 0f;
-        Enable();
+        
         var t = transform;
         t.position = start;
+        
         var vectorToTarget = t.position - towards;
         var angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg + 90f;
         var q = Quaternion.AngleAxis(angle, Vector3.forward);
-        transform.rotation = q;
+        t.rotation = q;
     }
         
     private void Update()
@@ -28,7 +33,7 @@ public class Arrow : Poolable
             return;
         
         if (TimeAlive >= LifeTime)
-            ReturnToPool();
+            ProjectileDestroyed?.Invoke(this, null);
 
         TimeAlive += Time.deltaTime;
         var moveDistance = Speed * Time.deltaTime;
@@ -53,11 +58,11 @@ public class Arrow : Poolable
         if (player != null)
             player.TakeDamage(Damage);
 
-        ReturnToPool();
+        ProjectileDestroyed?.Invoke(this, null);
     }
 
-    protected override void ReturnToPool()
+    public void Reset()
     {
-        ArrowsPool.Instance.ReturnObjectToPool(this);
+        gameObject.SetActive(false);
     }
 }

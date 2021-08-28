@@ -25,9 +25,4 @@ public class MageEnemy : Enemy
             StaffGlow.Glow();
         }
     }
-
-    protected override void ReturnToPool()
-    {
-        MageEnemyPool.Instance.ReturnObjectToPool(this);
-    }
 }

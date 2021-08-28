@@ -1,13 +1,14 @@
-﻿public class WarriorEnemy : Enemy
+﻿using UnityEngine;
+
+public class WarriorEnemy : Enemy
 {
+    [SerializeField] private LayerMask PlayerMask;
+    
     protected override void Attack()
     {
         base.Attack();
-        PlayerManager.Instance.DealDamageToPlayer(Damage);
-    }
-
-    protected override void ReturnToPool()
-    {
-        WarriorEnemyPool.Instance.ReturnObjectToPool(this);
+        var playerCollider = Physics2D.OverlapCircle(transform.position, 2f, PlayerMask);
+        if (playerCollider != null)
+            playerCollider.GetComponent<LivingEntity>().TakeDamage(Damage);
     }
 }

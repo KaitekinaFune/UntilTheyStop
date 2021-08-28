@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public abstract class Enemy : MovingLivingEntity
@@ -6,14 +7,16 @@ public abstract class Enemy : MovingLivingEntity
     
     [SerializeField] protected float PlayerAvoidanceRadius;
     [SerializeField] protected float PlayerAvoidanceRadiusTolerance;
-    [SerializeField] private float MoveSpeed;
     [SerializeField] private float AttackRate;
     [SerializeField] protected float Damage;
-    
+
+    private SpriteRenderer SpriteRenderer;
     private Transform Transform;
     private EnemyStateHandler StateHandler;
     private GlowingMonoBeh SpriteGlow;
     protected float NextTimeToAttack;
+
+    public static event Action<Enemy> OnAnyEnemyDeath;
 
     protected virtual bool CanAttack()
     {
@@ -22,18 +25,19 @@ public abstract class Enemy : MovingLivingEntity
                 StateHandler.CurrentState == EnemyState.Near);
     }
 
+    protected override void Awake()
+    {
+        base.Awake();
+        Transform = transform;
+        SpriteGlow = GetComponent<GlowingMonoBeh>();
+        SpriteRenderer = GetComponent<SpriteRenderer>();
+    }
+
     protected override void Start()
     {
         base.Start();
-        Transform = transform;
         StateHandler = new EnemyStateHandler(Transform,
             PlayerAvoidanceRadius, PlayerAvoidanceRadiusTolerance);
-        SpriteGlow = GetComponent<GlowingMonoBeh>();
-    }
-
-    protected override float GetMovementSpeed()
-    {
-        return MoveSpeed;
     }
 
     public override void Heal(float healAmount)
@@ -42,46 +46,10 @@ public abstract class Enemy : MovingLivingEntity
         SpriteGlow.Glow();
     }
 
-    public override void Respawn(Vector3 spawnPosition)
+    protected override void Die()
     {
-        base.Respawn(GetRandomSpawnPoint());
-    }
-
-    private Vector3 GetRandomSpawnPoint()
-    {
-        var playerPosition = PlayerManager.Instance.GetPlayerPosition();
-        var halfWidthScreen = GetScreenHalfWidthInWorldUnits();
-        var halfHeightScreen = GetScreenHalfHeightInWorldUnits();
-
-        var randomXPoint = Random.Range(-halfWidthScreen, halfWidthScreen);
-        var randomYPoint = Random.Range(-halfHeightScreen, halfHeightScreen);
-
-        if (Random.value > .5f)
-        {
-            if (Random.value > .5f)
-                return new Vector2(randomXPoint, halfHeightScreen);
-                
-            return new Vector2(randomXPoint, -halfHeightScreen);
-        }
-
-        if (Random.value > .5f)
-        {
-            return new Vector2(halfWidthScreen, randomYPoint);
-        }
-            
-        return new Vector2(-halfWidthScreen, randomYPoint);
-    }
-
-    private static float GetScreenHalfWidthInWorldUnits()
-    {
-        var camera = CameraHolder.Instance.Camera;
-        return camera.aspect * camera.orthographicSize;
-    }
-
-    private static float GetScreenHalfHeightInWorldUnits()
-    {
-        var camera = CameraHolder.Instance.Camera;
-        return camera.orthographicSize;
+        base.Die();
+        OnAnyEnemyDeath?.Invoke(this);
     }
 
     protected override void Update()
@@ -91,6 +59,8 @@ public abstract class Enemy : MovingLivingEntity
 
         if (CanAttack())
             Attack();
+        
+        SetMirroring();
     }
 
     protected override Vector2 GetDirection()
@@ -101,33 +71,37 @@ public abstract class Enemy : MovingLivingEntity
     private Vector2 GetDirectionToPlayer()
     {
         var direction = PlayerManager.Instance.GetDirectionToPlayer(Transform.position);
-        switch (StateHandler.CurrentState)
-        {
-            case EnemyState.OnAvoidRadius:
-                return Vector2.zero;
-            case EnemyState.Near:
-                direction = -direction;
-                break;
-            case EnemyState.Far:
-                break;
-        }
-
         return direction.normalized;
     }
 
-    protected override void SetMirroring()
+    private void SetMirroring()
     {
         var directionToPlayer = PlayerManager.Instance.GetDirectionToPlayer(Transform.position);
-        
+
         if (directionToPlayer.x < 0f)
-            transform.localRotation = Quaternion.Euler(0, 180, 0);
+            SpriteRenderer.flipX = true;
         else if (directionToPlayer.x >= 0f)
-            transform.localRotation = Quaternion.Euler(0, 0, 0);
+            SpriteRenderer.flipX = false;
     }
 
     protected virtual void Attack()
     {
         NextTimeToAttack = Time.time + AttackRate / 1f;
         Animator.SetTrigger(AttackAnimatorProperty);
+    }
+
+    protected override float GetMovementModifier()
+    {
+        switch (StateHandler.CurrentState)
+        {
+            case EnemyState.OnAvoidRadius:
+                return 0f;
+            case EnemyState.Near:
+                return -0.5f;
+            case EnemyState.Far:
+                break;
+        }
+        
+        return base.GetMovementModifier();
     }
 }

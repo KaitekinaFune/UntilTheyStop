@@ -1,15 +1,16 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+using Random = UnityEngine.Random;
 
-public class WaveManager : Singleton<WaveManager>
+[Serializable]
+public class WaveManager
 {
-    [SerializeField] private Transform SpawnPoint;
-
     [SerializeField] private int TankEnemiesPerWave;
     [SerializeField] private int MageEnemiesPerWave;
     [SerializeField] private int ArcherEnemiesPerWave;
 
-    private int CurrentWaveNumber;
-
+    public int CurrentWaveNumber { get; private set; }
+    
     public void NextWave()
     {
         CurrentWaveNumber++;
@@ -17,26 +18,32 @@ public class WaveManager : Singleton<WaveManager>
         var tankEnemiesToSpawn = TankEnemiesPerWave * CurrentWaveNumber;
         var mageEnemiesPerWave = MageEnemiesPerWave * CurrentWaveNumber;
         var archerEnemiesToSpawn = ArcherEnemiesPerWave * CurrentWaveNumber;
-
-        var tankEnemies = WarriorEnemyPool.Instance.Get(tankEnemiesToSpawn);
-        var mageEnemies = MageEnemyPool.Instance.Get(mageEnemiesPerWave);
-        var archerEnemies = ArcherEnemyPool.Instance.Get(archerEnemiesToSpawn);
-
-        var spawnPosition = SpawnPoint.position;
-
-        foreach (var enemy in tankEnemies)
+        
+        for (var i = 0; i < tankEnemiesToSpawn; i++)
         {
-            enemy.Respawn(spawnPosition);
+            var spawnPosition = Random.insideUnitCircle * 3f;
+            var enemy = EnemiesManager.Instance.GetEnemy(EnemyType.Warrior);
+            enemy.Spawn(spawnPosition);
         }
         
-        foreach (var enemy in mageEnemies)
+        for (var i = 0; i < mageEnemiesPerWave; i++)
         {
-            enemy.Respawn(spawnPosition);
+            var spawnPosition = Random.insideUnitCircle * 3f;
+            var enemy = EnemiesManager.Instance.GetEnemy(EnemyType.Mage);
+            enemy.Spawn(spawnPosition);
         }
+        
+        for (var i = 0; i < archerEnemiesToSpawn; i++)
+        {
+            var spawnPosition = Random.insideUnitCircle * 3f;
+            var enemy = EnemiesManager.Instance.GetEnemy(EnemyType.Archer);
+            enemy.Spawn(spawnPosition);
+        }
+    }
 
-        foreach (var enemy in archerEnemies)
-        {
-            enemy.Respawn(spawnPosition);
-        }
+    public void Start()
+    {
+        CurrentWaveNumber = 0;
+        NextWave();
     }
 }

@@ -1,14 +1,14 @@
-using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class InputManager : Singleton<InputManager>
 {
     [HideInInspector] public float HorizontalInput;
     [HideInInspector] public float VerticalInput;
 
-    public event Action OnFire1ButtonPressed;
-    public event Action OnFire2ButtonPressed;
-    public event Action OnFire3ButtonPressed;
+    public UnityEvent OnFire1ButtonPressed;
+    public UnityEvent OnFire2ButtonPressed;
+    public UnityEvent OnFire3ButtonPressed;
 
     private void Update()
     {

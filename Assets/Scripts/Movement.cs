@@ -22,18 +22,14 @@ public class Movement
         Active = value;
     }
 
-    public void Move(Vector2 moveAmount)
+    public void Move(Vector2 moveAmount, float movementModifier)
     {
         if (!Active)
             return;
-        
-        moveAmount *= Speed;
-        var direction = Rb.position + moveAmount * Time.deltaTime;
-        Rb.MovePosition(direction);
-    }
-
-    public Vector3 GetVelocity()
-    {
-        return Rb.velocity;
+        var speed = Speed * movementModifier;
+        var move = moveAmount * speed * Time.deltaTime;
+        var direction = Rb.position + move;
+        Rb.AddForce(move, ForceMode2D.Impulse);
+        //Rb.MovePosition(direction);
     }
 }

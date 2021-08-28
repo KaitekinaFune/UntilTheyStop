@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class GlowingMonoBeh : MonoBehaviour
 {
-    private readonly float GlowValue = 0.25f;
-    private readonly float NoGlowValue = 0f;
+    private const float GlowAlpha = 0.25f;
+    private const float NoGlowAlpha = 0f;
     private SpriteGlowEffect SpriteGlow;
     
     private void Awake()
@@ -21,13 +21,13 @@ public class GlowingMonoBeh : MonoBehaviour
     private IEnumerator GlowAsync()
     {
         float percent = 0;
-        SetSpriteGlowAlpha(GlowValue);
+        SetSpriteGlowAlpha(GlowAlpha);
 
         while (percent <= 1)
         {
             percent += Time.deltaTime;
             var interpolation = (-Mathf.Pow(percent, 2) + percent) * 4;
-            var glowAlpha = Mathf.Lerp(NoGlowValue, GlowValue, interpolation);
+            var glowAlpha = Mathf.Lerp(NoGlowAlpha, GlowAlpha, interpolation);
             SetSpriteGlowAlpha(glowAlpha);
             yield return null;
         }
