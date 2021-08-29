@@ -11,7 +11,7 @@ namespace LivingEntities.Player
     {
         protected override void Attack()
         {
-            StartCoroutine(DealDamageWithDelay());
+            StartCoroutine(nameof(DealDamageWithDelay));
         }
     
         private IEnumerator DealDamageWithDelay()
@@ -28,6 +28,13 @@ namespace LivingEntities.Player
             {
                 livingEntity.TakeDamage(Damage);
             }
+        }
+
+        public override void SetReady()
+        {
+            base.SetReady();
+            
+            StopCoroutine(nameof(DealDamageWithDelay));
         }
     }
 }

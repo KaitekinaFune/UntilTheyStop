@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using Managers;
 using TMPro;
 using UnityEngine;
@@ -28,6 +27,7 @@ namespace UI
 
         private Color StartingSkipTextColor;
         private bool SkipTextShowed;
+        private bool DialogueClosed;
 
         private void Start()
         {
@@ -37,6 +37,9 @@ namespace UI
 
         private void OnEnable()
         {
+            SkipText.color = new Color(SkipText.color.r, SkipText.color.g, SkipText.color.b, 0f);
+            DialogueClosed = false;
+            SkipTextShowed = false;
             StartCoroutine(nameof(StartType));
         }
 
@@ -84,12 +87,13 @@ namespace UI
 
         public void OnDialogueSkipped()
         {
+            if (DialogueClosed)
+                return;
+
             if (!SkipTextShowed)
                 SkipDialogue();
             else
                 CloseDialogue();
-            
-            OnDialogueClosed?.Invoke();
         }
 
         private void SkipDialogue()
@@ -101,7 +105,9 @@ namespace UI
 
         private void CloseDialogue()
         {
-            gameObject.SetActive(false);
+            DialogueClosed = true;
+            StopCoroutine(nameof(StartType));
+            StopCoroutine(nameof(ShowSkipText));
             OnDialogueClosed?.Invoke();
         }
     }

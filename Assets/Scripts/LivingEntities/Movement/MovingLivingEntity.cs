@@ -7,7 +7,7 @@ namespace LivingEntities
         [SerializeField] private float MoveSpeed;
     
         protected Animator Animator;
-        private readonly Movement.Movement Movement = new Movement.Movement();
+        private readonly Movement Movement = new Movement();
 
         protected virtual void Start()
         {

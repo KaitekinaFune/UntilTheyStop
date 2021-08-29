@@ -49,5 +49,13 @@ namespace LivingEntities.Player
                 }
             }
         }
+
+        public override void SetReady()
+        {
+            base.SetReady();
+            
+            StopCoroutine(nameof(DashCoroutine));
+            StopCoroutine(nameof(DealDashDamage));
+        }
     }
 }

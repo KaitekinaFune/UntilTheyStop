@@ -1,3 +1,4 @@
+using Effects;
 using LivingEntities.Enemy;
 using Pools;
 using Projectiles;
@@ -7,30 +8,38 @@ namespace Managers
 {
     public class EffectsManager : MonoBehaviour
     {
-        [SerializeField] private DeathEffect Prefab;
+        [SerializeField] private DeathEffect DeathEffectPrefab;
+        [SerializeField] private SpawnEffect SpawnEffectPrefab;
         [SerializeField] private int PoolSize;
     
-        private Pool<DeathEffect> Pool;
+        private Pool<DeathEffect> DeathEffectPool;
+        private Pool<SpawnEffect> SpawnEffectPool;
     
         private void Awake()
         {
-            Pool = new Pool<DeathEffect>(new PrefabFactory<DeathEffect>(Prefab), PoolSize);
+            DeathEffectPool = new Pool<DeathEffect>(new PrefabFactory<DeathEffect>(DeathEffectPrefab), PoolSize);
+            SpawnEffectPool = new Pool<SpawnEffect>(new PrefabFactory<SpawnEffect>(SpawnEffectPrefab), PoolSize);
         }
-
-        private void OnEnable()
-        {
-            Enemy.OnAnyEnemyDeath += OnAnyEnemyDeath;
-        }
-
-        private void OnDisable()
-        {
-            Enemy.OnAnyEnemyDeath -= OnAnyEnemyDeath;
-        }
-
-        private void OnAnyEnemyDeath(Enemy enemy)
+        
+        public void OnEnemyDeath(Enemy enemy)
         {
             var pos = enemy.transform.position;
-            var effect = Pool.Allocate();
+            var effect = DeathEffectPool.Allocate();
+
+            effect.transform.position = pos;
+            effect.gameObject.SetActive(true);
+            effect.OnAnimationEnd += OnAnimationEnd;
+            void OnAnimationEnd()
+            {
+                effect.OnAnimationEnd -= OnAnimationEnd;
+                effect.Reset();
+            }
+        }
+        
+        public void OnEnemySpawn(Enemy enemy)
+        {
+            var pos = enemy.transform.position;
+            var effect = SpawnEffectPool.Allocate();
 
             effect.transform.position = pos;
             effect.gameObject.SetActive(true);

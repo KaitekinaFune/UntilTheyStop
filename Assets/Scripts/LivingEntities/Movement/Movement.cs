@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace LivingEntities.Movement
+namespace LivingEntities
 {
     public class Movement
     {

@@ -11,7 +11,8 @@ namespace Managers
         private readonly int PoolSize;
         private readonly Enemy Prefab;
         private Pool<Enemy> Pool;
-        public event Action<EnemyPoolHandler, Enemy> EnemyDied;
+        
+        public event Action<Enemy> EnemyDied;
 
         public HashSet<Enemy> AliveEnemies { get; private set; }
         public int AliveEnemiesCount => AliveEnemies.Count;
@@ -41,7 +42,7 @@ namespace Managers
             if (livingEntity is Enemy enemy)
             {
                 enemy.OnDeath -= OnEnemyDeath;
-                EnemyDied?.Invoke(this, enemy);
+                EnemyDied?.Invoke(enemy);
                 AliveEnemies.Remove(enemy);
                 Pool.Release(enemy);
             }

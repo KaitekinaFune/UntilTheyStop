@@ -46,5 +46,10 @@ namespace LivingEntities.Player
         }
 
         protected abstract void Attack();
+
+        public virtual void SetReady()
+        {
+            LastAttackTime = Time.time - AttackCooldown;
+        }
     }
 }

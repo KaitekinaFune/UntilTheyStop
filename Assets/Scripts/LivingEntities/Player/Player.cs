@@ -38,6 +38,11 @@ namespace LivingEntities.Player
         public void SetReady(bool value)
         {
             Ready = value;
+            
+            Direction = Vector3.zero;
+            SwordAttack.SetReady();
+            DashAttack.SetReady();
+            RangedAttack.SetReady();
         }
 
         public void TrySwordAttack()

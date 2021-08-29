@@ -13,6 +13,8 @@ namespace LivingEntities.Player
     public class PlayerRangedAttack : PlayerAttack
     {
         public int PuddlesAmount;
+
+        private Coroutine Coroutine;
     
         protected override void Attack()
         {
@@ -39,7 +41,9 @@ namespace LivingEntities.Player
             void OnDamageActivated(DamageZone damageZone)
             {
                 damageZone.OnDamageActivated -= OnDamageActivated;
-                StartCoroutine(DealRangedDamage(damageZone));
+                
+                if (gameObject.activeSelf)
+                    Coroutine = StartCoroutine(DealRangedDamage(damageZone));
             }
         }
 
@@ -56,6 +60,14 @@ namespace LivingEntities.Player
                 livingEntity.TakeDamage(Damage);
                 yield return null;
             }
+        }
+
+        public override void SetReady()
+        {
+            base.SetReady();
+            
+            if (Coroutine != null)
+                StopCoroutine(Coroutine);
         }
     }
 }

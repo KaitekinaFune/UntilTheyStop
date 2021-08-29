@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using LivingEntities;
@@ -12,14 +11,10 @@ namespace Managers
     public class EnemiesManager : Singleton<EnemiesManager>
     {
         [SerializeField] private List<EnemyPoolData> EnemyPoolsData;
-        [SerializeField] private WaveManager WaveManager;
-        [SerializeField] private UnityEvent WaveEnded;
-        
-        [SerializeField] private float WaveStartDelay;
-        
         private Dictionary<EnemyType, EnemyPoolHandler> Pools;
 
-        public int Wave => WaveManager.CurrentWaveNumber;
+        public UnityEvent<Enemy> EnemyDied;
+        public UnityEvent WaveEnded;
 
         protected override void Awake()
         {
@@ -41,43 +36,25 @@ namespace Managers
             }
         }
     
-        private void OnEnemyDied(EnemyPoolHandler pool, Enemy enemy)
+        private void OnEnemyDied(Enemy enemy)
         {
+            EnemyDied?.Invoke(enemy);
+
             if (AliveEnemiesCount() <= 1)
-            {
                 WaveEnded?.Invoke();
-            }
         }
-
-        public void BeginWaveWithDelay()
+        
+        public void ResetEnemies()
         {
-            StartCoroutine(WaveStartWithDelay(WaveStartDelay));
-        }
-
-        private IEnumerator WaveStartWithDelay(float delay)
-        {
-            yield return new WaitForSeconds(delay);
-            WaveManager.NextWave();
+            foreach (var pool in Pools.Values)
+                pool.ReturnAll();
         }
 
         private int AliveEnemiesCount()
         {
             return Pools.Values.Sum(pool => pool.AliveEnemiesCount);
         }
-
-        public void Begin()
-        {
-            WaveManager.Start();
-        }
-    
-        public void Restart()
-        {
-            foreach (var pool in Pools.Values)
-                pool.ReturnAll();
         
-            WaveManager.Start();
-        }
-
         public Enemy GetEnemy(EnemyType type)
         {
             return Pools[type].Allocate();

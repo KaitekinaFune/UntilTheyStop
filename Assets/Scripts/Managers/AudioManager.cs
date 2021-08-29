@@ -2,19 +2,21 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Utils;
-using AudioType = Managers.AudioType;
 
-public class AudioManager : Singleton<AudioManager>
+namespace Managers
 {
-    [SerializeField] private AudioSource AudioSource;
-    [SerializeField] private List<AudioData> AudioDatas;
-
-    public void Play(AudioType type, float pitch = 1f)
+    public class AudioManager : Singleton<AudioManager>
     {
-        AudioSource.pitch = pitch;
-        foreach (var audioData in AudioDatas.Where(audioData => audioData.Type == type))
-            AudioSource.clip = audioData.Sound;
+        [SerializeField] private AudioSource AudioSource;
+        [SerializeField] private List<AudioData> AudioDatas;
 
-        AudioSource.Play();
+        public void Play(AudioType type, float pitch = 1f)
+        {
+            AudioSource.pitch = pitch;
+            foreach (var audioData in AudioDatas.Where(audioData => audioData.Type == type))
+                AudioSource.clip = audioData.Sound;
+
+            AudioSource.Play();
+        }
     }
 }

@@ -8,6 +8,11 @@ namespace UI
     {
         [SerializeField] private Image CooldownFill;
 
+        public void OnGameReady()
+        {
+            CooldownFill.fillAmount = 1f;
+        }
+
         public void StartCooldown(float cooldown)
         {
             StartCoroutine(CountCooldown(cooldown));

@@ -31,7 +31,7 @@ namespace LivingEntities.Player
         {
             Player.SetReady(value);
         }
-
+        
         private void OnDestroy()
         {
             Player.OnDeath -= InvokeOnPlayerDeath;

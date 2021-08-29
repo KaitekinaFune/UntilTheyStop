@@ -6,15 +6,17 @@ namespace UI
 {
     public class WaveTextUI : MonoBehaviour
     {
-        private TextMeshProUGUI Text;
-        private void Awake()
+        [SerializeField] private string WaveText = "Wave: ";
+        [SerializeField] private TextMeshProUGUI Text;
+        
+        public void SetWaveText(int number)
         {
-            Text = GetComponent<TextMeshProUGUI>();
+            Text.SetText($"{WaveText}{number}");
         }
 
-        public void OnEnable()
+        public void OnGameOver()
         {
-            Text.SetText($"Wave: {EnemiesManager.Instance.Wave}");
+            Text.SetText($"{WaveText}{WaveManager.Instance.CurrentWaveNumber}");
         }
     }
 }

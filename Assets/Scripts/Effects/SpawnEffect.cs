@@ -1,10 +1,10 @@
-using System;
+﻿using System;
 using Pools;
 using UnityEngine;
 
-namespace Projectiles
+namespace Effects
 {
-    public class DeathEffect : MonoBehaviour, IResettable
+    public class SpawnEffect : MonoBehaviour, IResettable
     {
         public event Action OnAnimationEnd;
 
