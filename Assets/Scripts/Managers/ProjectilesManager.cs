@@ -17,8 +17,13 @@ namespace Managers
         protected override void Awake()
         {
             base.Awake();
-            ArrowPool = new Pool<Arrow>(new PrefabFactory<Arrow>(ArrowPrefab), PoolSize);
-            DamageZonePool = new Pool<DamageZone>(new PrefabFactory<DamageZone>(DamageZonePrefab), PoolSize);
+            var managerTransform = transform;
+            ArrowPool = new Pool<Arrow>(
+                new PrefabFactory<Arrow>(ArrowPrefab, managerTransform),
+                PoolSize);
+            DamageZonePool = new Pool<DamageZone>(
+                new PrefabFactory<DamageZone>(DamageZonePrefab, managerTransform),
+                PoolSize);
         }
 
         public Arrow GetArrow()

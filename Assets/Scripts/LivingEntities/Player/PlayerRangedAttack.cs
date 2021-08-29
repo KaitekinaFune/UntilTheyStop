@@ -5,6 +5,7 @@ using System.Linq;
 using Managers;
 using Projectiles;
 using UnityEngine;
+using AudioType = Managers.AudioType;
 using Random = UnityEngine.Random;
 
 namespace LivingEntities.Player
@@ -21,7 +22,12 @@ namespace LivingEntities.Player
             for (var i = 0; i < PuddlesAmount; i++)
                 SpawnRangedAttack();
         }
-    
+
+        protected override AudioType GetAttackAudioType()
+        {
+            return AudioType.PlayerRangedAttack;
+        }
+
         private void SpawnRangedAttack()
         {
             var dz = ProjectilesManager.Instance.GetDamageZone();

@@ -7,5 +7,7 @@ namespace Managers
     {
         public AudioClip Sound;
         public AudioType Type;
+        public float Pitch;
+        public float Volume;
     }
 }

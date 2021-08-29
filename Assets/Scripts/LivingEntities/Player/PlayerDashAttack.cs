@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using AudioType = Managers.AudioType;
 
 namespace LivingEntities.Player
 {
@@ -19,7 +20,12 @@ namespace LivingEntities.Player
             StartCoroutine(nameof(DashCoroutine));
             StartCoroutine(nameof(DealDashDamage));
         }
-    
+
+        protected override AudioType GetAttackAudioType()
+        {
+            return AudioType.PlayerDashAttack;
+        }
+
         private IEnumerator DashCoroutine()
         {
             yield return new WaitForSeconds(AttackDelay);

@@ -8,7 +8,6 @@ namespace LivingEntities.Enemy
     public class MageEnemy : Enemy
     {
         [SerializeField] private int AlliesPerHeal;
-
         [SerializeField] private GlowingMonoBeh StaffGlow;
 
         protected override bool CanAttack()

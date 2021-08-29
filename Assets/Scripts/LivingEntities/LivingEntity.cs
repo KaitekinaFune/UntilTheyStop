@@ -1,7 +1,10 @@
 ﻿using System;
+using Managers;
 using Pools;
 using UnityEngine;
 using Utils;
+using AudioType = Managers.AudioType;
+using Vector3 = UnityEngine.Vector3;
 
 namespace LivingEntities
 {
@@ -23,14 +26,24 @@ namespace LivingEntities
             ResetHealth();
         }
 
-        public void Spawn(Vector3 spawnPosition)
+        public void SetSpawnPosition(Vector3 spawnPosition)
         {
+            gameObject.transform.position = spawnPosition;
+        }
+
+        public void Spawn()
+        {
+            Dead = false;
             ResetHealth();
             OnSpawn?.Invoke(this);
-            Dead = false;
-            gameObject.transform.position = spawnPosition;
             InvokeOnHealthChange();
             Enable();
+        }
+
+        public void Spawn(Vector3 spawnPosition)
+        {
+            SetSpawnPosition(spawnPosition);
+            Spawn();
         }
 
         public void TakeDamage(float damageAmount)
@@ -41,11 +54,19 @@ namespace LivingEntities
             Health -= damageAmount;
             Health = Mathf.Clamp(Health, 0f, float.MaxValue);
             InvokeOnHealthChange();
+            PlayHitSound(GetSoundType());
 
             if (Health <= 0f)
             {
                 Die();
             }
+        }
+
+        protected abstract AudioType GetSoundType();
+
+        private void PlayHitSound(AudioType type)
+        {
+            AudioManager.Instance.Play(type);
         }
 
         public virtual void Heal(float healAmount)

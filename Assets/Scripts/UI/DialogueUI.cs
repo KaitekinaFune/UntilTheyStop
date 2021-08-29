@@ -58,8 +58,7 @@ namespace UI
                 else if (Time.time >= lastAudioPlayTime + AudioCooldown)
                 {
                     lastAudioPlayTime = Time.time;
-                    var pitch = Random.Range(AudioPitchMin, AudioPitchMax);
-                    AudioManager.Instance.Play(AudioType.Dialogue, pitch);
+                    AudioManager.Instance.Play(AudioType.Dialogue);
                 }
 
                 yield return new WaitForSeconds(delay);

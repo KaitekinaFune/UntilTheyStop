@@ -2,6 +2,7 @@ using System;
 using LivingEntities.Player;
 using UnityEngine;
 using Utils;
+using AudioType = Managers.AudioType;
 
 namespace LivingEntities.Enemy
 {
@@ -54,6 +55,11 @@ namespace LivingEntities.Enemy
         {
             base.Die();
             OnAnyEnemyDeath?.Invoke(this);
+        }
+        
+        protected override AudioType GetSoundType()
+        {
+            return AudioType.EnemyHit;
         }
 
         protected override void Update()

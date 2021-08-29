@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using LivingEntities;
 using LivingEntities.Enemy;
 using Pools;
+using UnityEngine;
 
 namespace Managers
 {
@@ -23,9 +24,9 @@ namespace Managers
             Prefab = prefab;
         }
 
-        public void Init()
+        public void Init(Transform parent)
         {
-            Pool = new Pool<Enemy>(new PrefabFactory<Enemy>(Prefab), PoolSize);
+            Pool = new Pool<Enemy>(new PrefabFactory<Enemy>(Prefab, parent), PoolSize);
             AliveEnemies = new HashSet<Enemy>();
         }
 

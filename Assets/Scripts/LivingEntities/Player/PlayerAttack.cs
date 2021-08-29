@@ -1,6 +1,8 @@
 ﻿using System;
+using Managers;
 using UnityEngine;
 using UnityEngine.Events;
+using AudioType = Managers.AudioType;
 
 namespace LivingEntities.Player
 {
@@ -42,10 +44,12 @@ namespace LivingEntities.Player
             AttackDirection = attackDirection;
             AttackEvent?.Invoke(AttackCooldown);
             Animator.SetTrigger(AnimatorProperty);
+            AudioManager.Instance.Play(AudioType.PlayerDashAttack);
             Attack();
         }
 
         protected abstract void Attack();
+        protected abstract AudioType GetAttackAudioType();
 
         public virtual void SetReady()
         {

@@ -10,11 +10,14 @@ namespace Managers
         [SerializeField] private AudioSource AudioSource;
         [SerializeField] private List<AudioData> AudioDatas;
 
-        public void Play(AudioType type, float pitch = 1f)
+        public void Play(AudioType type)
         {
-            AudioSource.pitch = pitch;
             foreach (var audioData in AudioDatas.Where(audioData => audioData.Type == type))
+            {
+                AudioSource.pitch = audioData.Pitch;
+                AudioSource.volume = audioData.Volume;
                 AudioSource.clip = audioData.Sound;
+            }
 
             AudioSource.Play();
         }

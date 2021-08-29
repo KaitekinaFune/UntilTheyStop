@@ -46,10 +46,11 @@ namespace Managers
             {
                 var spawnPosition = Random.insideUnitCircle * range;
                 var enemy = EnemiesManager.Instance.GetEnemy(type);
-                enemy.Spawn(spawnPosition);
+                enemy.SetSpawnPosition(spawnPosition);
                 EnemySpawned?.Invoke(enemy);
                 
                 yield return new WaitForSeconds(SpawnDelay);
+                enemy.Spawn();
             }
         }
 

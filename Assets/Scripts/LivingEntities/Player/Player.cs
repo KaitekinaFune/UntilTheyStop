@@ -1,5 +1,6 @@
 using Managers;
 using UnityEngine;
+using AudioType = Managers.AudioType;
 
 namespace LivingEntities.Player
 {
@@ -77,7 +78,12 @@ namespace LivingEntities.Player
 
             RangedAttack.TryAttack(AttackDirection);
         }
-    
+
+        protected override AudioType GetSoundType()
+        {
+            return AudioType.PlayerHit;
+        }
+
         protected override void Die()
         {
             base.Die();
@@ -106,7 +112,7 @@ namespace LivingEntities.Player
             Animator.SetFloat(Horizontal, AttackDirection.x);
             Animator.SetFloat(Vertical, AttackDirection.y);
         }
-
+        
         private bool IsAttacking()
         {
             return SwordAttack.IsAttacking || DashAttack.IsAttacking || RangedAttack.IsAttacking;

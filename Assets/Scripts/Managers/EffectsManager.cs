@@ -1,7 +1,7 @@
 using Effects;
+using LivingEntities;
 using LivingEntities.Enemy;
 using Pools;
-using Projectiles;
 using UnityEngine;
 
 namespace Managers
@@ -17,13 +17,19 @@ namespace Managers
     
         private void Awake()
         {
-            DeathEffectPool = new Pool<DeathEffect>(new PrefabFactory<DeathEffect>(DeathEffectPrefab), PoolSize);
-            SpawnEffectPool = new Pool<SpawnEffect>(new PrefabFactory<SpawnEffect>(SpawnEffectPrefab), PoolSize);
+            var managerTransform = transform;
+            DeathEffectPool = new Pool<DeathEffect>(
+                new PrefabFactory<DeathEffect>(DeathEffectPrefab, managerTransform),
+                PoolSize);
+            
+            SpawnEffectPool = new Pool<SpawnEffect>(
+                new PrefabFactory<SpawnEffect>(SpawnEffectPrefab, managerTransform),
+                PoolSize);
         }
         
-        public void OnEnemyDeath(Enemy enemy)
+        public void OnLivingEntityDeath(LivingEntity entity)
         {
-            var pos = enemy.transform.position;
+            var pos = entity.transform.position;
             var effect = DeathEffectPool.Allocate();
 
             effect.transform.position = pos;
@@ -36,9 +42,9 @@ namespace Managers
             }
         }
         
-        public void OnEnemySpawn(Enemy enemy)
+        public void OnLivingEntitySpawn(LivingEntity entity)
         {
-            var pos = enemy.transform.position;
+            var pos = entity.transform.position;
             var effect = SpawnEffectPool.Allocate();
 
             effect.transform.position = pos;

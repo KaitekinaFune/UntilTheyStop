@@ -1,6 +1,8 @@
+using Managers;
 using UnityEngine;
 using UnityEngine.Events;
 using Utils;
+using AudioType = Managers.AudioType;
 using Vector3 = UnityEngine.Vector3;
 
 namespace LivingEntities.Player
@@ -11,8 +13,8 @@ namespace LivingEntities.Player
         [SerializeField] private Player Player;
         private Transform PlayerTransform;
 
-        public UnityEvent OnPlayerDeath;
-        public UnityEvent OnPlayerRespawned;
+        public UnityEvent<Player> OnPlayerDeath;
+        public UnityEvent<Player> OnPlayerRespawned;
 
         protected override void Awake()
         {
@@ -55,12 +57,13 @@ namespace LivingEntities.Player
 
         private void InvokeOnPlayerDeath(LivingEntity entity)
         {
-            OnPlayerDeath?.Invoke();
+            AudioManager.Instance.Play(AudioType.PlayerDeath);
+            OnPlayerDeath?.Invoke(Player);
         }
     
         private void InvokeOnPlayerRespawned(LivingEntity entity)
         {
-            OnPlayerRespawned?.Invoke();
+            OnPlayerRespawned?.Invoke(Player);
         }
     }
 }

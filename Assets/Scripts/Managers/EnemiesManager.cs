@@ -31,7 +31,7 @@ namespace Managers
 
             foreach (var pool in Pools.Values)
             {
-                pool.Init();
+                pool.Init(transform);
                 pool.EnemyDied += OnEnemyDied;
             }
         }

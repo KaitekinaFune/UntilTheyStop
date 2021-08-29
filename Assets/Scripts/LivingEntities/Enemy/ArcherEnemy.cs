@@ -4,7 +4,7 @@ using Managers;
 
 namespace LivingEntities.Enemy
 {
-    public class ArcherEnemy : global::LivingEntities.Enemy.Enemy
+    public class ArcherEnemy : Enemy
     {
         protected override void Attack()
         {

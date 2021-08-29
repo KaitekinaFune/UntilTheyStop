@@ -5,8 +5,11 @@
         Dialogue,
         EnemyHit,
         EnemySpawn,
-        Puddle,
+        EnemyAttack,
         PlayerHit,
         PlayerDeath,
+        PlayerSwordAttack,
+        PlayerRangedAttack,
+        PlayerDashAttack,
     }
 }
