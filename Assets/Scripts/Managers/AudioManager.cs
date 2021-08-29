@@ -48,6 +48,11 @@ namespace Managers
             }
         }
 
+        public void OnPlayerDeath()
+        {
+            Play(AudioType.PlayerDeath);
+        }
+
         public void OnPlayerTakeHit()
         {
             Play(AudioType.PlayerHit);

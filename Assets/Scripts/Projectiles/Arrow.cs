@@ -9,16 +9,17 @@ namespace Projectiles
     {
         [SerializeField] private float Speed;
         [SerializeField] private float LifeTime;
-        [SerializeField] private float Damage;
         [SerializeField] private LayerMask LayerMask;
 
+        private float Damage;
         private float TimeAlive;
         public EventHandler ProjectileDestroyed;
     
-        public void Launch(Vector3 start, Vector3 towards)
+        public void Launch(Vector3 start, Vector3 towards, float damage)
         {
             gameObject.SetActive(true);
-        
+
+            Damage = damage;
             TimeAlive = 0f;
         
             var t = transform;

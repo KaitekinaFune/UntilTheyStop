@@ -16,11 +16,13 @@ namespace LivingEntities.Player
     {
         [SerializeField] private int PuddlesAmount;
         [SerializeField] private float PuddlesSpawnDelay;
+        [SerializeField] private float PuddleLifeStealRatio;
 
         private Coroutine SpawnCoroutine;
         private Coroutine Coroutine;
 
         public UnityEvent OnPuddleSpawned;
+        public UnityEvent<float> OnPuddleDealtDamage;
     
         protected override void Attack()
         {
@@ -77,6 +79,7 @@ namespace LivingEntities.Player
                 .Select(collider2d => collider2d.GetComponent<LivingEntity>())
                 .Where(livingEntity => livingEntity != null))
             {
+                OnPuddleDealtDamage?.Invoke(Damage * PuddleLifeStealRatio);
                 livingEntity.TakeDamage(Damage);
                 yield return null;
             }

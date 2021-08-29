@@ -13,7 +13,7 @@ namespace LivingEntities.Enemy
             var from = transform.position;
             var playerPos = PlayerManager.Instance.GetPlayerPosition();
             var arrow = ProjectilesManager.Instance.GetArrow();
-            arrow.Launch(from, playerPos);
+            arrow.Launch(from, playerPos, Damage);
 
             arrow.ProjectileDestroyed += OnProjectileDestroyed;
             void OnProjectileDestroyed(object sender, EventArgs args)

@@ -28,7 +28,7 @@ namespace UI
 
         protected virtual void OnHealthChange(object sender, HealthChangeArgs e)
         {
-            if (Animated)
+            if (Animated && gameObject.activeSelf)
             {
                 StopCoroutine(HealAnimation(e));
                 StartCoroutine(HealAnimation(e));

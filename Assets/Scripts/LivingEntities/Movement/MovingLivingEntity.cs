@@ -9,12 +9,12 @@ namespace LivingEntities
         protected Animator Animator;
         private readonly Movement Movement = new Movement();
 
-        protected virtual void Start()
+        protected override void Awake()
         {
+            base.Awake();
             Animator = GetComponent<Animator>();
             Movement.SetRigidbody(GetComponent<Rigidbody2D>());
             Movement.SetMovementSpeed(MoveSpeed);
-            Movement.SetActive(true);
         }
 
         protected virtual void Update()

@@ -23,9 +23,8 @@ namespace LivingEntities.Player
         public event Action<PlayerAttackType> OnAttack;
         public Vector3 LookDirection => AttackDirection;
 
-        protected override void Start()
+        protected void Start()
         {
-            base.Start();
             ContactFilter2D = new ContactFilter2D
             {
                 layerMask = EnemyLayerMask,
@@ -45,6 +44,7 @@ namespace LivingEntities.Player
             SwordAttack.SetReady();
             DashAttack.SetReady();
             RangedAttack.SetReady();
+            Animator.SetBool(Idle, true);
         }
 
         public void TrySwordAttack()
@@ -85,6 +85,11 @@ namespace LivingEntities.Player
         public void OnRangedAttackSpawned()
         {
             OnAttack?.Invoke(PlayerAttackType.Ranged);
+        }
+
+        public void OnRangedAttackDealtDamage(float lifeStealAmount)
+        {
+            Heal(lifeStealAmount);
         }
 
         protected override void Die()

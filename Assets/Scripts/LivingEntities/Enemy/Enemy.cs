@@ -34,9 +34,8 @@ namespace LivingEntities.Enemy
             SpriteRenderer = GetComponent<SpriteRenderer>();
         }
 
-        protected override void Start()
+        protected void Start()
         {
-            base.Start();
             StateHandler = new EnemyStateHandler(Transform,
                 PlayerAvoidanceRadius, PlayerAvoidanceRadiusTolerance);
         }

@@ -7,7 +7,6 @@ namespace Managers
     {
         public UnityEvent GameStart;
         public UnityEvent GameReady;
-        public UnityEvent PlayerDied;
     
         private void Start()
         {
@@ -22,11 +21,6 @@ namespace Managers
         public void OnGameReady()
         {
             GameReady?.Invoke();
-        }
-        
-        public void OnPlayerDeath()
-        {
-            PlayerDied?.Invoke();
         }
     }
 }
