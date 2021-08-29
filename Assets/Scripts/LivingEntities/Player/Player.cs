@@ -17,6 +17,7 @@ namespace LivingEntities.Player
         private Vector3 Direction;
         private Vector3 AttackDirection;
         private ContactFilter2D ContactFilter2D;
+        private bool Ready;
 
         public Vector3 LookDirection => AttackDirection;
 
@@ -33,9 +34,17 @@ namespace LivingEntities.Player
             DashAttack.Init(Animator, ContactFilter2D);
             RangedAttack.Init(Animator, ContactFilter2D);
         }
+        
+        public void SetReady(bool value)
+        {
+            Ready = value;
+        }
 
         public void TrySwordAttack()
         {
+            if (!Ready)
+                return;
+            
             if (Dead)
                 return;
 
@@ -44,6 +53,9 @@ namespace LivingEntities.Player
     
         public void TryDashAttack()
         {
+            if (!Ready)
+                return;
+
             if (Dead)
                 return;
         
@@ -52,6 +64,9 @@ namespace LivingEntities.Player
         
         public void TryRangedAttack()
         {
+            if (!Ready)
+                return;
+
             if (Dead)
                 return;
 
@@ -67,6 +82,10 @@ namespace LivingEntities.Player
         protected override void Update()
         {
             base.Update();
+
+            if (!Ready)
+                return;
+
             var moveX = InputManager.Instance.HorizontalInput;
             var moveY = InputManager.Instance.VerticalInput;
 

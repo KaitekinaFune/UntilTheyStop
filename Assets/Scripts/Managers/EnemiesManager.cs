@@ -1,8 +1,10 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using LivingEntities;
 using LivingEntities.Enemy;
 using UnityEngine;
+using UnityEngine.Events;
 using Utils;
 
 namespace Managers
@@ -11,6 +13,10 @@ namespace Managers
     {
         [SerializeField] private List<EnemyPoolData> EnemyPoolsData;
         [SerializeField] private WaveManager WaveManager;
+        [SerializeField] private UnityEvent WaveEnded;
+        
+        [SerializeField] private float WaveStartDelay;
+        
         private Dictionary<EnemyType, EnemyPoolHandler> Pools;
 
         public int Wave => WaveManager.CurrentWaveNumber;
@@ -38,7 +44,20 @@ namespace Managers
         private void OnEnemyDied(EnemyPoolHandler pool, Enemy enemy)
         {
             if (AliveEnemiesCount() <= 1)
-                WaveManager.NextWave();
+            {
+                WaveEnded?.Invoke();
+            }
+        }
+
+        public void BeginWaveWithDelay()
+        {
+            StartCoroutine(WaveStartWithDelay(WaveStartDelay));
+        }
+
+        private IEnumerator WaveStartWithDelay(float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            WaveManager.NextWave();
         }
 
         private int AliveEnemiesCount()

@@ -23,8 +23,8 @@ namespace LivingEntities.Player
         private void SpawnRangedAttack()
         {
             var dz = ProjectilesManager.Instance.GetDamageZone();
-            var randomSpawnPoint = (Vector2)transform.position + AttackDirection
-                                                               + Random.insideUnitCircle * AttackRadius;
+            var randomSpawnPoint = (Vector2)transform.position + AttackDirection * 2
+                                                               + Random.insideUnitCircle;
         
             dz.Spawn(randomSpawnPoint);
             dz.OnAnimationEnd += OnAnimationEnd;

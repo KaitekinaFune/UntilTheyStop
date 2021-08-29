@@ -6,21 +6,28 @@ namespace Managers
 {
     public class GameManager : Singleton<GameManager>
     {
+        public UnityEvent GameStart;
+        public UnityEvent GameReady;
         public UnityEvent PlayerDied;
         public UnityEvent PlayerRespawned;
     
         private void Start()
         {
-            PlayerManager.Instance.OnPlayerDeath += OnPlayerDeath;
-            PlayerManager.Instance.OnPlayerRespawned += OnPlayerRespawned;
-            PlayerManager.Instance.Respawn();
-            EnemiesManager.Instance.Begin();
+            PrestartGame();
         }
 
-        private void OnDestroy()
+        private void PrestartGame()
         {
-            PlayerManager.Instance.OnPlayerDeath -= OnPlayerDeath;
-            PlayerManager.Instance.OnPlayerRespawned -= OnPlayerRespawned;
+            GameStart?.Invoke();
+            PlayerManager.Instance.SetReady(false);
+            PlayerManager.Instance.Respawn();
+        }
+
+        public void OnGameReady()
+        {
+            GameReady?.Invoke();
+            EnemiesManager.Instance.BeginWaveWithDelay();
+            PlayerManager.Instance.SetReady(true);
         }
 
         public void Restart()
@@ -29,12 +36,12 @@ namespace Managers
             EnemiesManager.Instance.Restart();
         }
 
-        private void OnPlayerDeath()
+        public void OnPlayerDeath()
         {
             PlayerDied?.Invoke();
         }
 
-        private void OnPlayerRespawned()
+        public void OnPlayerRespawned()
         {
             PlayerRespawned?.Invoke();
         }

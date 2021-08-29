@@ -101,7 +101,7 @@ namespace LivingEntities.Enemy
                 case EnemyState.OnAvoidRadius:
                     return 0f;
                 case EnemyState.Near:
-                    return -0.5f;
+                    return -0.35f;
                 case EnemyState.Far:
                     break;
             }

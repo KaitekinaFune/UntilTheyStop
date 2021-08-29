@@ -1,5 +1,5 @@
-using System;
 using UnityEngine;
+using UnityEngine.Events;
 using Utils;
 using Vector3 = UnityEngine.Vector3;
 
@@ -11,8 +11,8 @@ namespace LivingEntities.Player
         [SerializeField] private Player Player;
         private Transform PlayerTransform;
 
-        public event Action OnPlayerDeath;
-        public event Action OnPlayerRespawned;
+        public UnityEvent OnPlayerDeath;
+        public UnityEvent OnPlayerRespawned;
 
         protected override void Awake()
         {
@@ -25,6 +25,11 @@ namespace LivingEntities.Player
         public void Respawn()
         {
             Player.Spawn(PlayerSpawnPoint.position);
+        }
+
+        public void SetReady(bool value)
+        {
+            Player.SetReady(value);
         }
 
         private void OnDestroy()

@@ -32,13 +32,11 @@ namespace LivingEntities.Player
         {
             yield return new WaitForSeconds(AttackDelay);
             var t = 0f;
-            var nextDamageTickTime = 0f;
-            for (; t <= AttackTime; t += Time.deltaTime)
+            for (; t < AttackTime; )
             {
-                if (Time.time <= nextDamageTickTime)
-                    continue;
-            
-                nextDamageTickTime = Time.time + DashTickTime;
+                t += DashTickTime;
+                yield return new WaitForSeconds(DashTickTime);
+                
                 var collidersList = new List<Collider2D>();
                 Physics2D.OverlapCircle((Vector2) transform.position + (Vector2) AttackDirection,
                     AttackRadius, ContactFilter, collidersList);
@@ -49,8 +47,6 @@ namespace LivingEntities.Player
                 {
                     livingEntity.TakeDamage(Damage);
                 }
-
-                yield return null;
             }
         }
     }
