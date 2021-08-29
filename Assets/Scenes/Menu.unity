@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 31417557}
   - component: {fileID: 31417558}
   m_Layer: 0
-  m_Name: GameManager
+  m_Name: MainMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -166,7 +166,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f18b2fa8d477574459bf9eac215d4b07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MenuScene: 
   GameScene: Main
 --- !u!1 &647251026
 GameObject:
@@ -642,7 +641,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 31417558}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: LoadScene
+        m_MethodName: LoadGameScene
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
