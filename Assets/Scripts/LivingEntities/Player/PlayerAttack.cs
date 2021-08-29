@@ -1,8 +1,7 @@
 ﻿using System;
-using Managers;
 using UnityEngine;
 using UnityEngine.Events;
-using AudioType = Managers.AudioType;
+using AudioType = Audio.AudioType;
 
 namespace LivingEntities.Player
 {
@@ -35,17 +34,17 @@ namespace LivingEntities.Player
             ContactFilter = contactFilter2D;
         }
 
-        public virtual void TryAttack(Vector2 attackDirection)
+        public bool TryAttack(Vector2 attackDirection)
         {
             if (!CanAttack)
-                return;
+                return false;
         
             LastAttackTime = Time.time;
             AttackDirection = attackDirection;
             AttackEvent?.Invoke(AttackCooldown);
             Animator.SetTrigger(AnimatorProperty);
-            AudioManager.Instance.Play(AudioType.PlayerDashAttack);
             Attack();
+            return true;
         }
 
         protected abstract void Attack();
@@ -55,5 +54,12 @@ namespace LivingEntities.Player
         {
             LastAttackTime = Time.time - AttackCooldown;
         }
+    }
+    
+    public enum PlayerAttackType
+    {
+        Sword,
+        Dash,
+        Ranged
     }
 }

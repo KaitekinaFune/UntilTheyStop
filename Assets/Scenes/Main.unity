@@ -222,15 +222,27 @@ MonoBehaviour:
   TypeDelay: 0.05
   PunctuationTypeDelay: 0.1
   SkipTextShowAnimationLength: 1
-  AudioCooldown: 0.058
-  AudioPitchMin: 0.6
-  AudioPitchMax: 0.75
   OnDialogueClosed:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1456904391}
         m_TargetAssemblyTypeName: Managers.GameManager, Assembly-CSharp
         m_MethodName: OnGameReady
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnCharacterAppeared:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2057264207}
+        m_TargetAssemblyTypeName: Managers.AudioManager, Assembly-CSharp
+        m_MethodName: OnDialogueCharacter
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3705,6 +3717,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LivingEntity: {fileID: 1495539269}
   HealthBarFill: {fileID: 308456879}
+  FillAnimationDuration: 2
+  Animated: 1
   HealthText: {fileID: 615982736}
 --- !u!1 &928849759
 GameObject:
@@ -4414,18 +4428,6 @@ MonoBehaviour:
   OnPlayerDeath:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1456904391}
-        m_TargetAssemblyTypeName: Managers.GameManager, Assembly-CSharp
-        m_MethodName: OnPlayerDeath
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 2143794110}
         m_TargetAssemblyTypeName: Managers.EffectsManager, Assembly-CSharp
         m_MethodName: OnLivingEntityDeath
@@ -4445,6 +4447,36 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: Managers.EffectsManager, Assembly-CSharp
         m_MethodName: OnLivingEntitySpawn
         m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnPlayerAttack:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2057264207}
+        m_TargetAssemblyTypeName: Managers.AudioManager, Assembly-CSharp
+        m_MethodName: OnPlayerAttack
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnPlayerTakeHit:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2057264207}
+        m_TargetAssemblyTypeName: Managers.AudioManager, Assembly-CSharp
+        m_MethodName: OnPlayerTakeHit
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4633,11 +4665,19 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 1555216343, guid: 088705091a38fea4b92963e5c5dabbdf, type: 3}
+      propertyPath: PuddlesSpawnDelay
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 1555216343, guid: 088705091a38fea4b92963e5c5dabbdf, type: 3}
       propertyPath: AnimatorPropertyString
       value: RangedAttack
       objectReference: {fileID: 0}
     - target: {fileID: 1555216343, guid: 088705091a38fea4b92963e5c5dabbdf, type: 3}
       propertyPath: AttackEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1555216343, guid: 088705091a38fea4b92963e5c5dabbdf, type: 3}
+      propertyPath: OnPuddleSpawned.m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1555216343, guid: 088705091a38fea4b92963e5c5dabbdf, type: 3}
@@ -4649,6 +4689,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 314964648}
     - target: {fileID: 1555216343, guid: 088705091a38fea4b92963e5c5dabbdf, type: 3}
+      propertyPath: OnPuddleSpawned.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1555216343, guid: 088705091a38fea4b92963e5c5dabbdf, type: 3}
       propertyPath: AttackEvent.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
       objectReference: {fileID: 0}
@@ -4657,11 +4701,31 @@ PrefabInstance:
       value: StartCooldown
       objectReference: {fileID: 0}
     - target: {fileID: 1555216343, guid: 088705091a38fea4b92963e5c5dabbdf, type: 3}
+      propertyPath: OnPuddleSpawned.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1495539269}
+    - target: {fileID: 1555216343, guid: 088705091a38fea4b92963e5c5dabbdf, type: 3}
+      propertyPath: OnPuddleSpawned.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1555216343, guid: 088705091a38fea4b92963e5c5dabbdf, type: 3}
+      propertyPath: OnPuddleSpawned.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnRangedAttackSpawned
+      objectReference: {fileID: 0}
+    - target: {fileID: 1555216343, guid: 088705091a38fea4b92963e5c5dabbdf, type: 3}
       propertyPath: AttackEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: SkillIcon, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 1555216343, guid: 088705091a38fea4b92963e5c5dabbdf, type: 3}
+      propertyPath: OnPuddleSpawned.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: LivingEntities.Player.Player, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1555216343, guid: 088705091a38fea4b92963e5c5dabbdf, type: 3}
       propertyPath: AttackEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 1555216343, guid: 088705091a38fea4b92963e5c5dabbdf, type: 3}
+      propertyPath: OnPuddleSpawned.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 1555216344, guid: 088705091a38fea4b92963e5c5dabbdf, type: 3}
@@ -5569,6 +5633,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1495539269}
+        m_TargetAssemblyTypeName: LivingEntities.Player.Player, Assembly-CSharp
+        m_MethodName: OnNewWave
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   EnemySpawned:
     m_PersistentCalls:
       m_Calls:
@@ -5576,6 +5652,18 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: Managers.EffectsManager, Assembly-CSharp
         m_MethodName: OnLivingEntitySpawn
         m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 2057264207}
+        m_TargetAssemblyTypeName: Managers.AudioManager, Assembly-CSharp
+        m_MethodName: OnEnemySpawn
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -6095,6 +6183,33 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 2057264207}
+        m_TargetAssemblyTypeName: Managers.AudioManager, Assembly-CSharp
+        m_MethodName: OnEnemyDeath
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  EnemyHit:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2057264207}
+        m_TargetAssemblyTypeName: Managers.AudioManager, Assembly-CSharp
+        m_MethodName: OnEnemyTakeHit
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   WaveEnded:
     m_PersistentCalls:
       m_Calls:
@@ -6479,7 +6594,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2057264208}
   - component: {fileID: 2057264207}
-  - component: {fileID: 2057264206}
   m_Layer: 0
   m_Name: AudioManager
   m_TagString: Untagged
@@ -6487,102 +6601,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!82 &2057264206
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2057264205}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 0
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 0
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
 --- !u!114 &2057264207
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6595,12 +6613,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f05a8b00141199447992c36fe5e54d2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AudioSource: {fileID: 2057264206}
   AudioDatas:
   - {fileID: 11400000, guid: da60967abba5bdd4baefe49784e9dd6d, type: 2}
   - {fileID: 11400000, guid: 8940659f0ce7df449ab12a5c538a8e8f, type: 2}
   - {fileID: 11400000, guid: 651ab428effe08347aa93606b10d71e6, type: 2}
   - {fileID: 11400000, guid: 44eae848217df504e8669aa344977779, type: 2}
+  - {fileID: 11400000, guid: 3041930843397f34e8c007b5057f5100, type: 2}
+  - {fileID: 11400000, guid: 78031be2c06e33b48b1c7d3816f413d2, type: 2}
+  - {fileID: 11400000, guid: 5288ca190edaaae4d87be80f23d6ed90, type: 2}
+  - {fileID: 11400000, guid: 92c09f4fe5f94994f8e3bc4683e22b80, type: 2}
+  - {fileID: 11400000, guid: 95652cfbd0398564ab13de7fd8dfa61a, type: 2}
 --- !u!4 &2057264208
 Transform:
   m_ObjectHideFlags: 0

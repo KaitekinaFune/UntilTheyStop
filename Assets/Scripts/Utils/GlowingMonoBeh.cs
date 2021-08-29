@@ -17,6 +17,9 @@ namespace Utils
 
         public void Glow()
         {
+            if (!gameObject.activeSelf)
+                return;
+            
             StartCoroutine(GlowAsync());
         }
 

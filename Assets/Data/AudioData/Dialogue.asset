@@ -14,3 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Sound: {fileID: 8300000, guid: 7cf3116f87a910641b542ecfb711f75a, type: 3}
   Type: 0
+  PitchMin: 0.65
+  PitchMax: 0.75
+  Volume: 0.5
+  Cooldown: 0.1

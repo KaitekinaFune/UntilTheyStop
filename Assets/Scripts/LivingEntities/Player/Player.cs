@@ -1,6 +1,6 @@
+using System;
 using Managers;
 using UnityEngine;
-using AudioType = Managers.AudioType;
 
 namespace LivingEntities.Player
 {
@@ -20,6 +20,7 @@ namespace LivingEntities.Player
         private ContactFilter2D ContactFilter2D;
         private bool Ready;
 
+        public event Action<PlayerAttackType> OnAttack;
         public Vector3 LookDirection => AttackDirection;
 
         protected override void Start()
@@ -30,12 +31,12 @@ namespace LivingEntities.Player
                 layerMask = EnemyLayerMask,
                 useLayerMask = true
             };
-        
+
             SwordAttack.Init(Animator, ContactFilter2D);
             DashAttack.Init(Animator, ContactFilter2D);
             RangedAttack.Init(Animator, ContactFilter2D);
         }
-        
+
         public void SetReady(bool value)
         {
             Ready = value;
@@ -54,7 +55,8 @@ namespace LivingEntities.Player
             if (Dead)
                 return;
 
-            SwordAttack.TryAttack(AttackDirection);
+            if (SwordAttack.TryAttack(AttackDirection))
+                OnAttack?.Invoke(PlayerAttackType.Sword);
         }
     
         public void TryDashAttack()
@@ -65,7 +67,8 @@ namespace LivingEntities.Player
             if (Dead)
                 return;
         
-            DashAttack.TryAttack(AttackDirection);
+            if (DashAttack.TryAttack(AttackDirection))
+                OnAttack?.Invoke(PlayerAttackType.Dash);
         }
         
         public void TryRangedAttack()
@@ -79,9 +82,9 @@ namespace LivingEntities.Player
             RangedAttack.TryAttack(AttackDirection);
         }
 
-        protected override AudioType GetSoundType()
+        public void OnRangedAttackSpawned()
         {
-            return AudioType.PlayerHit;
+            OnAttack?.Invoke(PlayerAttackType.Ranged);
         }
 
         protected override void Die()
@@ -111,6 +114,11 @@ namespace LivingEntities.Player
             Animator.SetBool(Idle, Direction == Vector3.zero);
             Animator.SetFloat(Horizontal, AttackDirection.x);
             Animator.SetFloat(Vertical, AttackDirection.y);
+        }
+
+        public void OnNewWave()
+        {
+            HealFull();
         }
         
         private bool IsAttacking()

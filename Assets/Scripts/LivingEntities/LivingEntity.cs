@@ -1,9 +1,7 @@
 ﻿using System;
-using Managers;
 using Pools;
 using UnityEngine;
 using Utils;
-using AudioType = Managers.AudioType;
 using Vector3 = UnityEngine.Vector3;
 
 namespace LivingEntities
@@ -14,6 +12,7 @@ namespace LivingEntities
     
         public event Action<LivingEntity> OnSpawn;
         public event Action<LivingEntity> OnDeath;
+        public event Action OnTakeHit;
         public EventHandler<HealthChangeArgs> OnHealthChange;
 
         protected bool Dead;
@@ -54,21 +53,13 @@ namespace LivingEntities
             Health -= damageAmount;
             Health = Mathf.Clamp(Health, 0f, float.MaxValue);
             InvokeOnHealthChange();
-            PlayHitSound(GetSoundType());
 
             if (Health <= 0f)
-            {
                 Die();
-            }
+            else
+                OnTakeHit?.Invoke();
         }
-
-        protected abstract AudioType GetSoundType();
-
-        private void PlayHitSound(AudioType type)
-        {
-            AudioManager.Instance.Play(type);
-        }
-
+        
         public virtual void Heal(float healAmount)
         {
             if (Dead)
@@ -79,6 +70,11 @@ namespace LivingEntities
             InvokeOnHealthChange();
         }
 
+        protected void HealFull()
+        {
+            Heal(StartingHealth);
+        }
+        
         private void InvokeOnHealthChange()
         {
             OnHealthChange?.Invoke(this, new HealthChangeArgs(StartingHealth, Health));

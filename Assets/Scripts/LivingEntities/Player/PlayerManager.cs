@@ -1,8 +1,6 @@
-using Managers;
 using UnityEngine;
 using UnityEngine.Events;
 using Utils;
-using AudioType = Managers.AudioType;
 using Vector3 = UnityEngine.Vector3;
 
 namespace LivingEntities.Player
@@ -15,12 +13,17 @@ namespace LivingEntities.Player
 
         public UnityEvent<Player> OnPlayerDeath;
         public UnityEvent<Player> OnPlayerRespawned;
+        public UnityEvent<PlayerAttackType> OnPlayerAttack;
+        public UnityEvent OnPlayerTakeHit;
 
         protected override void Awake()
         {
             base.Awake();
+            
             Player.OnDeath += InvokeOnPlayerDeath;
             Player.OnSpawn += InvokeOnPlayerRespawned;
+            Player.OnTakeHit += InvokeOnPlayerTakeHit;
+            Player.OnAttack += InvokeOnPlayerAttack;
             PlayerTransform = Player.transform;
         }
 
@@ -38,6 +41,8 @@ namespace LivingEntities.Player
         {
             Player.OnDeath -= InvokeOnPlayerDeath;
             Player.OnSpawn -= InvokeOnPlayerRespawned;
+            Player.OnTakeHit -= InvokeOnPlayerTakeHit;
+            Player.OnAttack -= InvokeOnPlayerAttack;
         }
 
         public Vector3 GetPlayerPosition()
@@ -57,13 +62,22 @@ namespace LivingEntities.Player
 
         private void InvokeOnPlayerDeath(LivingEntity entity)
         {
-            AudioManager.Instance.Play(AudioType.PlayerDeath);
             OnPlayerDeath?.Invoke(Player);
         }
     
         private void InvokeOnPlayerRespawned(LivingEntity entity)
         {
             OnPlayerRespawned?.Invoke(Player);
+        }
+
+        private void InvokeOnPlayerTakeHit()
+        {
+            OnPlayerTakeHit?.Invoke();
+        }
+        
+        private void InvokeOnPlayerAttack(PlayerAttackType playerAttackType)
+        {
+            OnPlayerAttack?.Invoke(playerAttackType);
         }
     }
 }

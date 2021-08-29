@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using AudioType = Managers.AudioType;
+using AudioType = Audio.AudioType;
 
 namespace LivingEntities.Player
 {

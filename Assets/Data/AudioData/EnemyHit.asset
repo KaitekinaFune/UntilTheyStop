@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5c163c354bcf483a9823968dc02f953a, type: 3}
-  m_Name: PlayerHit
+  m_Name: EnemyHit
   m_EditorClassIdentifier: 
-  Sound: {fileID: 8300000, guid: 7e2e83522e89c464fb8926cb6071e0e8, type: 3}
-  Type: 5
+  Sound: {fileID: 8300000, guid: 6898cbd9507d5ad409a7862fbf60793d, type: 3}
+  Type: 1
   PitchMin: 0.8
-  PitchMax: 0.9
-  Volume: 0.05
-  Cooldown: 0
+  PitchMax: 1
+  Volume: 0.15
+  Cooldown: 0.1

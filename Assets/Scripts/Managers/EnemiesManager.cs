@@ -13,7 +13,8 @@ namespace Managers
         [SerializeField] private List<EnemyPoolData> EnemyPoolsData;
         private Dictionary<EnemyType, EnemyPoolHandler> Pools;
 
-        public UnityEvent<Enemy> EnemyDied;
+        public UnityEvent<LivingEntity> EnemyDied;
+        public UnityEvent EnemyHit;
         public UnityEvent WaveEnded;
 
         protected override void Awake()
@@ -33,15 +34,30 @@ namespace Managers
             {
                 pool.Init(transform);
                 pool.EnemyDied += OnEnemyDied;
+                pool.EnemyHit += OnEnemyHit;
             }
         }
-    
-        private void OnEnemyDied(Enemy enemy)
+
+        private void OnDestroy()
+        {
+            foreach (var pool in Pools.Values)
+            {
+                pool.EnemyDied -= OnEnemyDied;
+                pool.EnemyHit -= OnEnemyHit;
+            }
+        }
+
+        private void OnEnemyDied(LivingEntity enemy)
         {
             EnemyDied?.Invoke(enemy);
 
             if (AliveEnemiesCount() <= 1)
                 WaveEnded?.Invoke();
+        }
+        
+        private void OnEnemyHit()
+        {
+            EnemyHit?.Invoke();
         }
         
         public void ResetEnemies()
@@ -55,7 +71,7 @@ namespace Managers
             return Pools.Values.Sum(pool => pool.AliveEnemiesCount);
         }
         
-        public Enemy GetEnemy(EnemyType type)
+        public LivingEntity GetEnemy(EnemyType type)
         {
             return Pools[type].Allocate();
         }

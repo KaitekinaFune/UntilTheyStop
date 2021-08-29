@@ -1,8 +1,6 @@
-using System;
 using LivingEntities.Player;
 using UnityEngine;
 using Utils;
-using AudioType = Managers.AudioType;
 
 namespace LivingEntities.Enemy
 {
@@ -20,8 +18,6 @@ namespace LivingEntities.Enemy
         private EnemyStateHandler StateHandler;
         private GlowingMonoBeh SpriteGlow;
         protected float NextTimeToAttack;
-
-        public static event Action<Enemy> OnAnyEnemyDeath;
 
         protected virtual bool CanAttack()
         {
@@ -50,18 +46,7 @@ namespace LivingEntities.Enemy
             base.Heal(healAmount);
             SpriteGlow.Glow();
         }
-
-        protected override void Die()
-        {
-            base.Die();
-            OnAnyEnemyDeath?.Invoke(this);
-        }
-        
-        protected override AudioType GetSoundType()
-        {
-            return AudioType.EnemyHit;
-        }
-
+  
         protected override void Update()
         {
             base.Update();

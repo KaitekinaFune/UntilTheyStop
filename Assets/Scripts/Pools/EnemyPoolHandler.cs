@@ -10,12 +10,13 @@ namespace Managers
     public class EnemyPoolHandler
     {
         private readonly int PoolSize;
-        private readonly Enemy Prefab;
-        private Pool<Enemy> Pool;
+        private readonly LivingEntity Prefab;
+        private Pool<LivingEntity> Pool;
         
-        public event Action<Enemy> EnemyDied;
+        public event Action<LivingEntity> EnemyDied;
+        public event Action EnemyHit;
 
-        public HashSet<Enemy> AliveEnemies { get; private set; }
+        public HashSet<LivingEntity> AliveEnemies { get; private set; }
         public int AliveEnemiesCount => AliveEnemies.Count;
 
         public EnemyPoolHandler(int poolSize, Enemy prefab)
@@ -26,27 +27,31 @@ namespace Managers
 
         public void Init(Transform parent)
         {
-            Pool = new Pool<Enemy>(new PrefabFactory<Enemy>(Prefab, parent), PoolSize);
-            AliveEnemies = new HashSet<Enemy>();
+            Pool = new Pool<LivingEntity>(new PrefabFactory<LivingEntity>(Prefab, parent), PoolSize);
+            AliveEnemies = new HashSet<LivingEntity>();
         }
 
-        public Enemy Allocate()
+        public LivingEntity Allocate()
         {
             var enemy = Pool.Allocate();
             AliveEnemies.Add(enemy);
             enemy.OnDeath += OnEnemyDeath;
+            enemy.OnTakeHit += OnEnemyHit;
             return enemy;
         }
 
         private void OnEnemyDeath(LivingEntity livingEntity)
         {
-            if (livingEntity is Enemy enemy)
-            {
-                enemy.OnDeath -= OnEnemyDeath;
-                EnemyDied?.Invoke(enemy);
-                AliveEnemies.Remove(enemy);
-                Pool.Release(enemy);
-            }
+            livingEntity.OnTakeHit -= OnEnemyHit;
+            livingEntity.OnDeath -= OnEnemyDeath;
+            EnemyDied?.Invoke(livingEntity);
+            AliveEnemies.Remove(livingEntity);
+            Pool.Release(livingEntity);
+        }
+
+        private void OnEnemyHit()
+        {
+            EnemyHit?.Invoke();
         }
 
         public void ReturnAll()

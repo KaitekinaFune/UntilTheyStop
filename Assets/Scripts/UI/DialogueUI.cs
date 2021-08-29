@@ -1,10 +1,7 @@
 ﻿using System.Collections;
-using Managers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
-using AudioType = Managers.AudioType;
-using Random = UnityEngine.Random;
 
 namespace UI
 {
@@ -19,11 +16,8 @@ namespace UI
         [SerializeField] private float PunctuationTypeDelay;
         [SerializeField] private float SkipTextShowAnimationLength;
 
-        [SerializeField] private float AudioCooldown;
-        [SerializeField] private float AudioPitchMin;
-        [SerializeField] private float AudioPitchMax;
-
         [SerializeField] private UnityEvent OnDialogueClosed;
+        [SerializeField] private UnityEvent OnCharacterAppeared;
 
         private Color StartingSkipTextColor;
         private bool SkipTextShowed;
@@ -46,21 +40,15 @@ namespace UI
         private IEnumerator StartType()
         {
             DialogueText.SetText("");
-            var lastAudioPlayTime = Time.time;
+            
             foreach (var c in DialogueTextString)
             {
                 var delay = TypeDelay;
                 DialogueText.text += c;
                 if (c == ',' || c == '.')
-                {
                     delay += PunctuationTypeDelay;
-                }
-                else if (Time.time >= lastAudioPlayTime + AudioCooldown)
-                {
-                    lastAudioPlayTime = Time.time;
-                    AudioManager.Instance.Play(AudioType.Dialogue);
-                }
 
+                OnCharacterAppeared?.Invoke();
                 yield return new WaitForSeconds(delay);
             }
 

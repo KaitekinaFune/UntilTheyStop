@@ -5,7 +5,8 @@ using System.Linq;
 using Managers;
 using Projectiles;
 using UnityEngine;
-using AudioType = Managers.AudioType;
+using UnityEngine.Events;
+using AudioType = Audio.AudioType;
 using Random = UnityEngine.Random;
 
 namespace LivingEntities.Player
@@ -13,14 +14,27 @@ namespace LivingEntities.Player
     [Serializable]
     public class PlayerRangedAttack : PlayerAttack
     {
-        public int PuddlesAmount;
+        [SerializeField] private int PuddlesAmount;
+        [SerializeField] private float PuddlesSpawnDelay;
 
+        private Coroutine SpawnCoroutine;
         private Coroutine Coroutine;
+
+        public UnityEvent OnPuddleSpawned;
     
         protected override void Attack()
         {
+            SpawnCoroutine = StartCoroutine(SpawnRangedAttacks());
+        }
+
+        private IEnumerator SpawnRangedAttacks()
+        {
             for (var i = 0; i < PuddlesAmount; i++)
+            {
+                OnPuddleSpawned?.Invoke();
                 SpawnRangedAttack();
+                yield return new WaitForSeconds(PuddlesSpawnDelay);
+            }
         }
 
         protected override AudioType GetAttackAudioType()
@@ -74,6 +88,9 @@ namespace LivingEntities.Player
             
             if (Coroutine != null)
                 StopCoroutine(Coroutine);
+
+            if (SpawnCoroutine != null)
+                StopCoroutine(SpawnCoroutine);
         }
     }
 }

@@ -1,25 +1,76 @@
 using System.Collections.Generic;
 using System.Linq;
+using Audio;
+using LivingEntities.Player;
 using UnityEngine;
 using Utils;
+using AudioType = Audio.AudioType;
 
 namespace Managers
 {
     public class AudioManager : Singleton<AudioManager>
     {
-        [SerializeField] private AudioSource AudioSource;
         [SerializeField] private List<AudioData> AudioDatas;
-
-        public void Play(AudioType type)
+        
+        private readonly List<AudioHandler> AudioHandlers = new List<AudioHandler>();
+        
+        private void Start()
         {
-            foreach (var audioData in AudioDatas.Where(audioData => audioData.Type == type))
+            foreach (var audioHandler in AudioDatas.Select(audioData => 
+                new AudioHandler(audioData, gameObject.AddComponent<AudioSource>())))
             {
-                AudioSource.pitch = audioData.Pitch;
-                AudioSource.volume = audioData.Volume;
-                AudioSource.clip = audioData.Sound;
+                AudioHandlers.Add(audioHandler);
             }
+        }
 
-            AudioSource.Play();
+        private void Play(AudioType type)
+        {
+            foreach (var audioHandler in AudioHandlers.Where(audioHandler => audioHandler.Type == type))
+            {
+                audioHandler.Play();
+                break;
+            }
+        }
+
+        public void OnPlayerAttack(PlayerAttackType attackType)
+        {
+            switch (attackType)
+            {
+                case PlayerAttackType.Sword:
+                    Play(AudioType.PlayerSwordAttack);
+                    break;
+                case PlayerAttackType.Dash:
+                    Play(AudioType.PlayerDashAttack);
+                    break;
+                case PlayerAttackType.Ranged:
+                    Play(AudioType.PlayerRangedAttack);
+                    break;
+            }
+        }
+
+        public void OnPlayerTakeHit()
+        {
+            Play(AudioType.PlayerHit);
+        }
+
+        public void OnDialogueCharacter()
+        {
+            Play(AudioType.Dialogue);
+        }
+
+        public void OnEnemySpawn()
+        {
+            Play(AudioType.EnemySpawn);
+        }
+
+        public void OnEnemyTakeHit()
+        {
+            Play(AudioType.EnemyHit);
+        }
+
+        public void OnEnemyDeath()
+        {
+            Play(AudioType.EnemyDeath);
         }
     }
 }

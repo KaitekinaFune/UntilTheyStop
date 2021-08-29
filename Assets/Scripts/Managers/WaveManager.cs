@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using LivingEntities;
 using LivingEntities.Enemy;
 using UnityEngine;
 using UnityEngine.Events;
@@ -17,8 +18,9 @@ namespace Managers
         [SerializeField] private float WaveStartDelay;
         
         [SerializeField] private UnityEvent<int> WaveNumberChanged;
-        [SerializeField] private UnityEvent<Enemy> EnemySpawned;
+        [SerializeField] private UnityEvent<LivingEntity> EnemySpawned;
 
+        public float TimeBetweenWaves => WaveStartDelay;
         public int CurrentWaveNumber { get; private set; }
     
         public void NextWave()
