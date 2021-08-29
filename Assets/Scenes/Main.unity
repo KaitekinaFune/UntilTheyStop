@@ -4464,6 +4464,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 470826971}
+        m_TargetAssemblyTypeName: UI.WaveTextUI, Assembly-CSharp
+        m_MethodName: OnGameOver
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnPlayerRespawned:
     m_PersistentCalls:
       m_Calls:
@@ -4694,7 +4706,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1555216343, guid: 088705091a38fea4b92963e5c5dabbdf, type: 3}
       propertyPath: PuddleLifeStealRatio
-      value: 0.5
+      value: 0.7
       objectReference: {fileID: 0}
     - target: {fileID: 1555216343, guid: 088705091a38fea4b92963e5c5dabbdf, type: 3}
       propertyPath: AnimatorPropertyString
@@ -4962,7 +4974,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8913650944857850995, guid: 088705091a38fea4b92963e5c5dabbdf, type: 3}
       propertyPath: StartingHealth
-      value: 7500
+      value: 10000
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 088705091a38fea4b92963e5c5dabbdf, type: 3}

@@ -254,8 +254,8 @@ MonoBehaviour:
   MoveSpeed: 5
   PlayerAvoidanceRadius: 5
   PlayerAvoidanceRadiusTolerance: 1
-  AttackRate: 0.5
-  Damage: 15
+  AttackRate: 1.2
+  Damage: 8
 --- !u!114 &175582387757215458
 MonoBehaviour:
   m_ObjectHideFlags: 0

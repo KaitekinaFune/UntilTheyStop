@@ -52,7 +52,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   StartingHealth: 200
   MoveSpeed: 5
-  PlayerAvoidanceRadius: 1
+  PlayerAvoidanceRadius: 1.5
   PlayerAvoidanceRadiusTolerance: 0.125
   AttackRate: 0.65
   Damage: 10
