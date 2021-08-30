@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Managers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -21,7 +22,6 @@ namespace UI
 
         private Color StartingSkipTextColor;
         private bool SkipTextShowed;
-        private bool DialogueClosed;
 
         private void Start()
         {
@@ -32,9 +32,15 @@ namespace UI
         private void OnEnable()
         {
             SkipText.color = new Color(SkipText.color.r, SkipText.color.g, SkipText.color.b, 0f);
-            DialogueClosed = false;
             SkipTextShowed = false;
             StartCoroutine(nameof(StartType));
+
+            InputManager.Instance.AnyKeyPressed += TrySkipDialogue;
+        }
+
+        private void OnDisable()
+        {
+            InputManager.Instance.AnyKeyPressed -= TrySkipDialogue;
         }
 
         private IEnumerator StartType()
@@ -72,11 +78,8 @@ namespace UI
             }
         }
 
-        public void OnDialogueSkipped()
+        private void TrySkipDialogue()
         {
-            if (DialogueClosed)
-                return;
-
             if (!SkipTextShowed)
                 SkipDialogue();
             else
@@ -92,7 +95,6 @@ namespace UI
 
         private void CloseDialogue()
         {
-            DialogueClosed = true;
             StopCoroutine(nameof(StartType));
             StopCoroutine(nameof(ShowSkipText));
             OnDialogueClosed?.Invoke();

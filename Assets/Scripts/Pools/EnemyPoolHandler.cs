@@ -2,10 +2,9 @@ using System;
 using System.Collections.Generic;
 using LivingEntities;
 using LivingEntities.Enemy;
-using Pools;
 using UnityEngine;
 
-namespace Managers
+namespace Pools
 {
     public class EnemyPoolHandler
     {

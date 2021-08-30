@@ -1,9 +1,8 @@
 ﻿using UnityEngine;
-using AudioType = Audio.AudioType;
 
-namespace Managers
+namespace Audio
 {
-    [CreateAssetMenu(menuName = "AudioData", fileName = "New AudioData")]
+    [CreateAssetMenu(menuName = "Audio Data", fileName = "New Audio Data")]
     public class AudioData : ScriptableObject
     {
         public AudioClip Sound;

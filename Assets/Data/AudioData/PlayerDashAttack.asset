@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: PlayerDashAttack
   m_EditorClassIdentifier: 
   Sound: {fileID: 8300000, guid: 439c36da5f5aa184f908f1086220ed46, type: 3}
-  Type: 9
+  Type: 8
   PitchMin: 0.75
   PitchMax: 0.95
-  Volume: 0.5
+  Volume: 0.45
   Cooldown: 0

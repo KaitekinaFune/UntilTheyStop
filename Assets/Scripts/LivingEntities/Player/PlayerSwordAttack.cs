@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using AudioType = Audio.AudioType;
 
 namespace LivingEntities.Player
 {
@@ -13,11 +12,6 @@ namespace LivingEntities.Player
         protected override void Attack()
         {
             StartCoroutine(nameof(DealDamageWithDelay));
-        }
-
-        protected override AudioType GetAttackAudioType()
-        {
-            return AudioType.PlayerSwordAttack;
         }
 
         private IEnumerator DealDamageWithDelay()

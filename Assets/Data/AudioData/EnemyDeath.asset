@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: EnemyDeath
   m_EditorClassIdentifier: 
   Sound: {fileID: 8300000, guid: 927db458620b5464cbae2fc7efbd58c9, type: 3}
-  Type: 4
+  Type: 3
   PitchMin: 0.8
-  PitchMax: 1
-  Volume: 0.3
+  PitchMax: 0.95
+  Volume: 0.2
   Cooldown: 0.1

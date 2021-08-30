@@ -3,27 +3,22 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using AudioType = Audio.AudioType;
 
 namespace LivingEntities.Player
 {
     [Serializable]
     public class PlayerDashAttack : PlayerAttack
     {
-        public float DashSpeed;
-        public float DashTickTime;
-    
+        [SerializeField] private float DashSpeed;
+        [SerializeField] private float DashTickTime;
+
+        public float GetDashSpeed => DashSpeed;
         public bool IsDashing { get; private set; }
 
         protected override void Attack()
         {
             StartCoroutine(nameof(DashCoroutine));
             StartCoroutine(nameof(DealDashDamage));
-        }
-
-        protected override AudioType GetAttackAudioType()
-        {
-            return AudioType.PlayerDashAttack;
         }
 
         private IEnumerator DashCoroutine()

@@ -6,14 +6,12 @@ namespace LivingEntities.Player
 {
     public class Player : MovingLivingEntity
     {
-        private static readonly int Horizontal = Animator.StringToHash("Horizontal");
-        private static readonly int Vertical = Animator.StringToHash("Vertical");
-        private static readonly int Idle = Animator.StringToHash("Idle");
-    
         [SerializeField] private PlayerSwordAttack SwordAttack;
         [SerializeField] private PlayerDashAttack DashAttack;
         [SerializeField] private PlayerRangedAttack RangedAttack;
         [SerializeField] private LayerMask EnemyLayerMask;
+
+        private PlayerMoveAnimation MoveAnimation;
     
         private Vector3 Direction;
         private Vector3 AttackDirection;
@@ -25,6 +23,7 @@ namespace LivingEntities.Player
 
         protected void Start()
         {
+            MoveAnimation = new PlayerMoveAnimation(Animator);
             ContactFilter2D = new ContactFilter2D
             {
                 layerMask = EnemyLayerMask,
@@ -44,15 +43,13 @@ namespace LivingEntities.Player
             SwordAttack.SetReady();
             DashAttack.SetReady();
             RangedAttack.SetReady();
-            Animator.SetBool(Idle, true);
+            
+            MoveAnimation?.SetIdle(true);
         }
 
         public void TrySwordAttack()
         {
-            if (!Ready)
-                return;
-            
-            if (Dead)
+            if (!Ready || Dead)
                 return;
 
             if (SwordAttack.TryAttack(AttackDirection))
@@ -61,10 +58,7 @@ namespace LivingEntities.Player
     
         public void TryDashAttack()
         {
-            if (!Ready)
-                return;
-
-            if (Dead)
+            if (!Ready || Dead)
                 return;
         
             if (DashAttack.TryAttack(AttackDirection))
@@ -73,10 +67,7 @@ namespace LivingEntities.Player
         
         public void TryRangedAttack()
         {
-            if (!Ready)
-                return;
-
-            if (Dead)
+            if (!Ready || Dead)
                 return;
 
             RangedAttack.TryAttack(AttackDirection);
@@ -100,11 +91,10 @@ namespace LivingEntities.Player
 
         protected override void Update()
         {
-            base.Update();
-
-            if (!Ready)
+            if (!Ready || Dead)
                 return;
-
+            
+            base.Update();
             var moveX = InputManager.Instance.HorizontalInput;
             var moveY = InputManager.Instance.VerticalInput;
 
@@ -116,9 +106,9 @@ namespace LivingEntities.Player
             if (IsAttacking())
                 return;
 
-            Animator.SetBool(Idle, Direction == Vector3.zero);
-            Animator.SetFloat(Horizontal, AttackDirection.x);
-            Animator.SetFloat(Vertical, AttackDirection.y);
+            MoveAnimation?.SetIdle(Direction == Vector3.zero);
+            MoveAnimation?.SetHorizontal(AttackDirection.x);
+            MoveAnimation?.SetVertical(AttackDirection.y);
         }
 
         public void OnNewWave()
@@ -128,7 +118,9 @@ namespace LivingEntities.Player
         
         private bool IsAttacking()
         {
-            return SwordAttack.IsAttacking || DashAttack.IsAttacking || RangedAttack.IsAttacking;
+            return SwordAttack.IsAttacking
+                   || DashAttack.IsAttacking
+                   || RangedAttack.IsAttacking;
         }
 
         protected override Vector2 GetDirection()
@@ -139,7 +131,7 @@ namespace LivingEntities.Player
         protected override float GetMovementModifier()
         {
             if (DashAttack.IsDashing)
-                return DashAttack.DashSpeed;
+                return DashAttack.GetDashSpeed;
 
             return IsAttacking() ? 0.35f : base.GetMovementModifier();
         }

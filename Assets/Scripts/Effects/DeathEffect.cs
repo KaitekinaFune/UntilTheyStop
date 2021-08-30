@@ -8,7 +8,7 @@ namespace Effects
     {
         public event Action OnAnimationEnd;
 
-        public void EndAnimation()
+        private void EndAnimation()
         {
             OnAnimationEnd?.Invoke();
         }

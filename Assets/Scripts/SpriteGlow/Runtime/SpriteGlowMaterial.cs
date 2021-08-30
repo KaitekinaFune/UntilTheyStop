@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace SpriteGlow
+namespace SpriteGlow.Runtime
 {
     public class SpriteGlowMaterial : Material
     {

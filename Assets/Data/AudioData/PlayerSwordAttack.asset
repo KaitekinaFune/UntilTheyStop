@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PlayerSwordAttack
   m_EditorClassIdentifier: 
   Sound: {fileID: 8300000, guid: 4ec78bca45aca9c4ea05017f0a6f2ef2, type: 3}
-  Type: 7
+  Type: 6
   PitchMin: 1
   PitchMax: 1
   Volume: 0.1

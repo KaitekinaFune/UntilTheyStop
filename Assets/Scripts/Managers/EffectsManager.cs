@@ -1,6 +1,5 @@
 using Effects;
 using LivingEntities;
-using LivingEntities.Enemy;
 using Pools;
 using UnityEngine;
 

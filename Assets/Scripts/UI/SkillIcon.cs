@@ -10,7 +10,7 @@ namespace UI
 
         public void OnGameReady()
         {
-            CooldownFill.fillAmount = 1f;
+            CooldownFill.fillAmount = 0f;
         }
 
         public void StartCooldown(float cooldown)

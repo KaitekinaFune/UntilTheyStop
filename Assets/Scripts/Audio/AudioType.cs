@@ -5,7 +5,6 @@
         Dialogue,
         EnemyHit,
         EnemySpawn,
-        EnemyAttack,
         EnemyDeath,
         PlayerHit,
         PlayerDeath,

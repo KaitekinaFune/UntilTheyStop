@@ -16,5 +16,5 @@ MonoBehaviour:
   Type: 1
   PitchMin: 0.8
   PitchMax: 1
-  Volume: 0.15
+  Volume: 0.125
   Cooldown: 0.1

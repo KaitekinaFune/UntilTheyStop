@@ -1,5 +1,5 @@
+using Effects;
 using Pools;
-using Projectiles;
 using UnityEngine;
 using Utils;
 

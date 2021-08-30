@@ -170,11 +170,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   StartingHealth: 75
   MoveSpeed: 7
-  PlayerAvoidanceRadius: 5
+  PlayerAvoidanceRadius: 7
   PlayerAvoidanceRadiusTolerance: 1
   AttackRate: 5
   Damage: 50
-  AlliesPerHeal: 2
+  AlliesPerHeal: 3
   StaffGlow: {fileID: 7823320796847657376}
 --- !u!114 &422675982612135304
 MonoBehaviour:
@@ -189,7 +189,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   glowColor: {r: 0, g: 1, b: 0.021892548, a: 0}
-  glowBrightness: 2.56
+  glowBrightness: 2.49
   outlineWidth: 1
   alphaThreshold: 0
   drawOutside: 1

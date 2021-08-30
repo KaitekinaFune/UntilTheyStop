@@ -2,7 +2,7 @@
 using Pools;
 using UnityEngine;
 
-namespace Projectiles
+namespace Effects
 {
     public class DamageZone : MonoBehaviour, IResettable
     {

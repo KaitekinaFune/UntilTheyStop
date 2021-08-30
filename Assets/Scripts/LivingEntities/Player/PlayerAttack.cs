@@ -1,29 +1,28 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.Events;
-using AudioType = Audio.AudioType;
 
 namespace LivingEntities.Player
 {
     [Serializable]
     public abstract class PlayerAttack : MonoBehaviour
     {
-        public float AttackDelay;
-        public float AttackRadius;
-        public float AttackTime;
-        public float Damage;
-        public float AttackCooldown;
-        public string AnimatorPropertyString;
+        [SerializeField] protected float AttackDelay;
+        [SerializeField] protected float AttackRadius;
+        [SerializeField] protected float AttackTime;
+        [SerializeField] protected float Damage;
+        [SerializeField] protected float AttackCooldown;
+        [SerializeField] protected string AnimatorPropertyString;
 
         protected int AnimatorProperty;
         protected Animator Animator;
         protected ContactFilter2D ContactFilter;
         protected Vector2 AttackDirection;
-
-        public UnityEvent<float> AttackEvent;
     
         private float LastAttackTime;
-        public bool CanAttack => Time.time >= LastAttackTime + AttackCooldown;
+        private bool CanAttack => Time.time >= LastAttackTime + AttackCooldown;
+
+        public UnityEvent<float> AttackEvent;
         public bool IsAttacking => Time.time <= LastAttackTime + AttackTime;
 
         public virtual void Init(Animator animator, ContactFilter2D contactFilter2D)
@@ -47,19 +46,11 @@ namespace LivingEntities.Player
             return true;
         }
 
-        protected abstract void Attack();
-        protected abstract AudioType GetAttackAudioType();
-
         public virtual void SetReady()
         {
             LastAttackTime = Time.time - AttackCooldown;
         }
-    }
-    
-    public enum PlayerAttackType
-    {
-        Sword,
-        Dash,
-        Ranged
+
+        protected abstract void Attack();
     }
 }

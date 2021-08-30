@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using SpriteGlow;
+using SpriteGlow.Runtime;
 using UnityEngine;
 
 namespace Utils

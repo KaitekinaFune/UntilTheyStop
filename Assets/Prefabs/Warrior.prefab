@@ -55,7 +55,8 @@ MonoBehaviour:
   PlayerAvoidanceRadius: 1.5
   PlayerAvoidanceRadiusTolerance: 0.125
   AttackRate: 0.65
-  Damage: 10
+  Damage: 12
+  AttackRadius: 2
   PlayerMask:
     serializedVersion: 2
     m_Bits: 128

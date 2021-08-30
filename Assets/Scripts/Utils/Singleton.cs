@@ -16,8 +16,6 @@ namespace Utils
             {
                 Destroy(this);
             }
-
-            DontDestroyOnLoad(this);
         }
     }
 }

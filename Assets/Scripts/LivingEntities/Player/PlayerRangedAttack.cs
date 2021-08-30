@@ -2,11 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Effects;
 using Managers;
-using Projectiles;
 using UnityEngine;
 using UnityEngine.Events;
-using AudioType = Audio.AudioType;
 using Random = UnityEngine.Random;
 
 namespace LivingEntities.Player
@@ -37,11 +36,6 @@ namespace LivingEntities.Player
                 SpawnRangedAttack();
                 yield return new WaitForSeconds(PuddlesSpawnDelay);
             }
-        }
-
-        protected override AudioType GetAttackAudioType()
-        {
-            return AudioType.PlayerRangedAttack;
         }
 
         private void SpawnRangedAttack()

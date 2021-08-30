@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace SpriteGlow
+namespace SpriteGlow.Runtime
 {
     /// <summary>
     /// Adds an HDR outline over the <see cref="SpriteRenderer"/>'s sprite borders.

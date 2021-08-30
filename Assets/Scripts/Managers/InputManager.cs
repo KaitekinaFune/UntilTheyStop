@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -19,6 +20,8 @@ namespace Managers
         public UnityEvent OnFire2ButtonPressed;
         public UnityEvent OnFire3ButtonPressed;
 
+        public event Action AnyKeyPressed;
+
         private void Update()
         {
             HorizontalInput = Input.GetAxisRaw("Horizontal");
@@ -32,6 +35,9 @@ namespace Managers
             
             foreach (var _ in Fire3Buttons.Where(Input.GetKeyDown))
                 OnFire3ButtonPressed?.Invoke();
+
+            if (Input.anyKeyDown) 
+                AnyKeyPressed?.Invoke();
         }
     }
 }

@@ -21,9 +21,7 @@ namespace LivingEntities
         {
             var speed = Speed * movementModifier;
             var move = moveAmount * speed * Time.deltaTime;
-            var direction = Rb.position + move;
             Rb.AddForce(move, ForceMode2D.Impulse);
-            //Rb.MovePosition(direction);
         }
     }
 }

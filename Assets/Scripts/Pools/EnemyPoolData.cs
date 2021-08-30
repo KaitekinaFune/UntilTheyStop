@@ -1,9 +1,9 @@
 ﻿using LivingEntities.Enemy;
 using UnityEngine;
 
-namespace Managers
+namespace Pools
 {
-    [CreateAssetMenu(menuName = "Pools/Enemy Pool", fileName = "New Enemy Pool Data")]
+    [CreateAssetMenu(menuName = "Enemy Pool", fileName = "New Enemy Pool Data")]
     public class EnemyPoolData : ScriptableObject
     {
         public int PoolSize;

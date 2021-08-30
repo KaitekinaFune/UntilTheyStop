@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PlayerDeath
   m_EditorClassIdentifier: 
   Sound: {fileID: 8300000, guid: 77f7b7c9e69c72348bffbb363f7ea88a, type: 3}
-  Type: 6
+  Type: 3
   PitchMin: 0.9
   PitchMax: 1
   Volume: 0.5
