@@ -9,6 +9,7 @@ namespace UI
     {
         [SerializeField] protected LivingEntity LivingEntity;
         [SerializeField] private RectTransform HealthBarFill;
+        [SerializeField] private Transform Parent;
         
         [SerializeField] private float FillAnimationDuration = 2f;
         [SerializeField] private bool Animated;
@@ -28,7 +29,7 @@ namespace UI
 
         protected virtual void OnHealthChange(object sender, HealthChangeArgs e)
         {
-            if (Animated && gameObject.activeSelf)
+            if (Animated && Parent.gameObject.activeSelf)
             {
                 StopCoroutine(HealAnimation(e));
                 StartCoroutine(HealAnimation(e));

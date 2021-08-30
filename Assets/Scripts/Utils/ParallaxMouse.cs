@@ -1,14 +1,14 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Utils
 {
-    public class Parallax : MonoBehaviour
+    public class ParallaxMouse : MonoBehaviour
     {
-        [SerializeField] private Camera Camera;
         [SerializeField] private float ParallaxAmount;
+        [SerializeField] private Camera Camera;
 
         private Vector3 StartPosition = Vector3.zero;
-    
+
         private void Start()
         {
             StartPosition = transform.position;
@@ -16,14 +16,20 @@ namespace Utils
 
         private void FixedUpdate()
         {
-            var cameraPos = Camera.transform.position;
-            var distX = (cameraPos.x * ParallaxAmount);
-            var distY = (cameraPos.y * ParallaxAmount);
+            var mousePos = Input.mousePosition;
+            
+            if (mousePos.x < 0 || mousePos.x >= Screen.width
+            || mousePos.y < 0 || mousePos.y >= Screen.height)
+                return;
+            
+            var mousePosWorld = Camera.ScreenToWorldPoint(mousePos);
+            var distX = (-mousePosWorld.x * ParallaxAmount);
+            var distY = (-mousePosWorld.y * ParallaxAmount);
 
             var objTransform = transform;
             var position = objTransform.position;
             position = new Vector3(StartPosition.x + distX, StartPosition.y + distY, position.z);
-        
+
             objTransform.position = position;
         }
     }
