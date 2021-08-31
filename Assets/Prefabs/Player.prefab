@@ -134,7 +134,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StartingHealth: 10000
-  MoveSpeed: 20
+  MoveSpeed: 100
   SwordAttack: {fileID: 1555216345}
   DashAttack: {fileID: 1555216344}
   RangedAttack: {fileID: 1555216343}
@@ -153,7 +153,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 2.5
+  m_Mass: 10
   m_LinearDrag: 5
   m_AngularDrag: 0.05
   m_GravityScale: 0
@@ -271,15 +271,59 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AttackDelay: 0
-  AttackRadius: 0
-  AttackTime: 0
-  Damage: 0
-  AttackCooldown: 0
-  AnimatorPropertyString: 
+  AttackRadius: 0.75
+  AttackTime: 1
+  Damage: 70
+  AttackCooldown: 10
+  AnimatorPropertyString: RangedAttack
   AttackEvent:
     m_PersistentCalls:
-      m_Calls: []
-  PuddlesAmount: 0
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: SkillIcon, Assembly-CSharp
+        m_MethodName: StartCooldown
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  PuddlesAmount: 3
+  PuddlesSpawnDelay: 0.25
+  PuddleLifeStealRatio: 0.6
+  OnPuddleSpawned:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8913650944857850995}
+        m_TargetAssemblyTypeName: LivingEntities.Player.Player, Assembly-CSharp
+        m_MethodName: OnRangedAttackSpawned
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnPuddleDealtDamage:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8913650944857850995}
+        m_TargetAssemblyTypeName: LivingEntities.Player.Player, Assembly-CSharp
+        m_MethodName: OnRangedAttackDealtDamage
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1555216344
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -292,17 +336,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15c2ba37a53a4d2fb2caa02ead39cde1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AttackDelay: 0
-  AttackRadius: 0
-  AttackTime: 0
-  Damage: 0
-  AttackCooldown: 0
-  AnimatorPropertyString: 
+  AttackDelay: 0.25
+  AttackRadius: 1
+  AttackTime: 0.25
+  Damage: 15
+  AttackCooldown: 3
+  AnimatorPropertyString: DashAttack
   AttackEvent:
     m_PersistentCalls:
-      m_Calls: []
-  DashSpeed: 0
-  DashTickTime: 0
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: SkillIcon, Assembly-CSharp
+        m_MethodName: StartCooldown
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  DashSpeed: 7
+  DashTickTime: 0.1
 --- !u!114 &1555216345
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -315,12 +371,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78f67ad0184a405ba1d2b10bfaebd99e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AttackDelay: 0
-  AttackRadius: 0
-  AttackTime: 0
-  Damage: 0
-  AttackCooldown: 0
-  AnimatorPropertyString: 
+  AttackDelay: 0.5
+  AttackRadius: 1.4
+  AttackTime: 1
+  Damage: 60
+  AttackCooldown: 1.55
+  AnimatorPropertyString: SwordAttack
   AttackEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: SkillIcon, Assembly-CSharp
+        m_MethodName: StartCooldown
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
